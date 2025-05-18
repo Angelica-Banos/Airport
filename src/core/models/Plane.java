@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package airport;
+package core.models;
 
 import java.util.ArrayList;
 
@@ -11,15 +11,14 @@ import java.util.ArrayList;
  * @author edangulo
  */
 public class Plane {
-    
-    private final String id;
+        private final String id;
     private String brand;
     private String model;
     private final int maxCapacity;
     private String airline;
     private ArrayList<Flight> flights;
-
-    public Plane(String id, String brand, String model, int maxCapacity, String airline) {
+    
+        public Plane(String id, String brand, String model, int maxCapacity, String airline) {
         this.id = id;
         this.brand = brand;
         this.model = model;
@@ -27,7 +26,8 @@ public class Plane {
         this.airline = airline;
         this.flights = new ArrayList<>();
     }
-
+        
+        
     public void addFlight(Flight flight) {
         this.flights.add(flight);
     }
@@ -59,5 +59,4 @@ public class Plane {
     public int getNumFlights() {
         return flights.size();
     }
-    
 }
