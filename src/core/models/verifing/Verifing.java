@@ -13,14 +13,14 @@ public class Verifing {
     public Verifing() {
     }
     
-    public int verifyPlaneId(String id){
+    public static  int verifyPlaneId(String id){
         String letters = id.substring(0, 2);
         String numbers = id.substring(id.length()-5);
         
         
         boolean uppercase = Character.isUpperCase(letters.charAt(0)) && Character.isUpperCase(letters.charAt(1));
         if(!uppercase){
-            return 0; //Both letters aren't in uppercase
+            return 2; //Both letters aren't in uppercase
         }
         
         try {
@@ -29,6 +29,6 @@ public class Verifing {
             return 1; //Doesn't end in 5 numbers
         }
         
-        return 2; //Nice
+        return 0; //Nice
     }
 }

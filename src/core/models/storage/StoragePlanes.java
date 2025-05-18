@@ -4,19 +4,23 @@
  */
 package core.models.storage;
 
+import core.models.Plane;
+import java.util.ArrayList;
+
 /**
  *
  * @author Angie
  */
 public class StoragePlanes implements Storage{
   private static StoragePlanes instance;
-    
+  private ArrayList<Plane> planes;
+  
+  
     private StoragePlanes(){
-        instance = new StoragePlanes();
+        this.planes = new ArrayList<>();
     }
     
-    @Override
-    public Storage getInstance() {
+    public static StoragePlanes getInstance() {
         if(instance == null){
             instance = new StoragePlanes();
         }
@@ -37,9 +41,13 @@ public class StoragePlanes implements Storage{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
-    public boolean get() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Plane get(String id) {
+        for (Plane pl : planes){
+            if(pl.getId().equals(id)){
+                return pl;
+            }
+        }
+        return null;
     }
 
 

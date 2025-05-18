@@ -12,7 +12,6 @@ public interface Storage {
     boolean add(); 
     boolean delete(); 
     boolean update(); 
-    boolean get(); 
-    Storage getInstance();
+   // T get(String id); 
     
 }
