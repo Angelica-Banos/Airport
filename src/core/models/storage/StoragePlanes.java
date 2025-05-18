@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Angie
  */
-public class StoragePlanes implements Storage{
+public class StoragePlanes implements Storage<Plane>{
   private static StoragePlanes instance;
   private ArrayList<Plane> planes;
   
@@ -27,8 +27,14 @@ public class StoragePlanes implements Storage{
         return instance;
     }
     @Override
-    public boolean add() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean add(Plane plane) {
+        for(Plane pl : planes){
+            if(pl.getId().equals(plane.getId())){
+                return false;
+            }
+        }
+        planes.add(plane);
+        return true;
     }
 
     @Override
@@ -41,6 +47,7 @@ public class StoragePlanes implements Storage{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    @Override
     public Plane get(String id) {
         for (Plane pl : planes){
             if(pl.getId().equals(id)){

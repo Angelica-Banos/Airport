@@ -8,10 +8,10 @@ package core.models.storage;
  *
  * @author Angie
  */
-public interface Storage {
-    boolean add(); 
+public interface Storage<T> {
+    boolean add(T meow); 
     boolean delete(); 
     boolean update(); 
-   // T get(String id); 
+    T get(String id); 
     
 }
