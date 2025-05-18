@@ -6,10 +6,11 @@ package core.models.persistency;
 
 import java.util.ArrayList;
 
+
 /**
  *
  * @author Angie
  */
 public interface ReadJSon {
-    ArrayList<String> read(String ruta);
+    ArrayList<String> read(String path);
 }
