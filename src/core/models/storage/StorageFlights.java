@@ -1,49 +1,43 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package core.models.storage;
 
-/**
- *
- * @author Angie
- */
-public class StorageFlights implements Storage {
+import core.models.Flight;
+import java.util.ArrayList;
+import java.util.List;
+
+public class StorageFlights {
+
     private static StorageFlights instance;
-    
-    private StorageFlights(){
-        instance = new StorageFlights();
+    private List<Flight> flights;
+
+    private StorageFlights() {
+        flights = new ArrayList<>();
     }
-    
-    @Override
-    public Storage getInstance() {
-        if(instance == null){
+
+    public static StorageFlights getInstance() {
+        if (instance == null) {
             instance = new StorageFlights();
         }
         return instance;
     }
-    
-    
-    @Override
-    public boolean add() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+    public boolean add(Flight flight) {
+        if (!exists(flight.getId())) {
+            flights.add(flight);
+            return true;
+        }
+        return false;
     }
 
-    @Override
-    public boolean delete() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean exists(String id) {
+        for (Flight flight : flights) {
+            if (flight.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    @Override
-    public boolean update() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Flight> getAll() {
+        return flights;
     }
-
-    @Override
-    public boolean get() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    
-    
 }
