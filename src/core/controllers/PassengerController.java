@@ -7,6 +7,9 @@ package core.controllers;
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  *
@@ -28,18 +31,16 @@ public class PassengerController {
         } catch (Exception e) {
             return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
         }
-       
-        
+
         try {
-             //Verify that the string fields are not empty
+            //Verify that the string fields are not empty
             if (firstname.length() < 1 | lastname.length() < 1 | country.length() < 1) {
                 return new Response("Fields must not be empty", Status.BAD_REQUEST);
             }
         } catch (Exception e) {
             return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
         }
-        
-        
+
         try {
             //Verify lenght of countryPhoneCode
             String p = String.valueOf(phone);
@@ -53,8 +54,19 @@ public class PassengerController {
         } catch (Exception e) {
             return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
         }
-        
-        
+
+        try {
+            //  Validar que birthDate no sea null ni en el futuro
+            if (birthDate == null) {
+                return new Response("Birth date must not be null", Status.BAD_REQUEST);
+            }
+            if (birthDate.isAfter(LocalDate.now())) {
+                return new Response("Birth date cannot be in the future", Status.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return new Response("Error validating birth date", Status.INTERNAL_SERVER_ERROR);
+        }
+
         try {
             //Verify lenght of phone
             String c = String.valueOf(countryPhoneCode);
@@ -68,7 +80,7 @@ public class PassengerController {
         } catch (Exception e) {
             return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
         }
-        return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
+        return new Response("Passenger created successfully", Status.OK);
 
     }
 }
