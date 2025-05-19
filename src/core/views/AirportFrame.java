@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import org.netbeans.lib.awtextra.AbsoluteLayout;
+import org.netbeans.lib.awtextra.AbsoluteConstraints;
 
 
 /**
@@ -1426,6 +1428,8 @@ public class AirportFrame extends javax.swing.JFrame {
         }
         tabbedPane.setEnabledAt(5, false);
         tabbedPane.setEnabledAt(6, false);
+        tabbedPane.setEnabledAt(7, false);
+        
     }//GEN-LAST:event_radioButtonAdminActionPerformed
 
     private void radioButtonUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonUserActionPerformed
