@@ -14,23 +14,23 @@ public class FlightController {
             int hoursDurationArrival, int minutesDurationArrival,
             int hoursDurationScale, int minutesDurationScale) {
         try {
-
+            //Verify id
             if (id == null || id.trim().isEmpty()) {
                 return new Response("Flight ID must not be empty", Status.BAD_REQUEST);
             }
-
+            //Verify that plane exist
             if (plane == null) {
                 return new Response("Plane must not be null", Status.BAD_REQUEST);
             }
-
+            //Verify departure and arrival
             if (departureLocation == null || arrivalLocation == null) {
                 return new Response("Departure and Arrival locations must not be null", Status.BAD_REQUEST);
             }
-
+            //Verify that the departure date exist
             if (departureDate == null || departureDate.isBefore(LocalDateTime.now())) {
                 return new Response("Departure date must be in the future", Status.BAD_REQUEST);
             }
-
+            //Verify hours and minutes
             if (hoursDurationArrival < 0 || minutesDurationArrival < 0) {
                 return new Response("Arrival duration must be positive", Status.BAD_REQUEST);
             }
@@ -54,9 +54,7 @@ public class FlightController {
             long totalHours = hoursDurationArrival + hoursDurationScale;
             long totalMinutes = minutesDurationArrival + minutesDurationScale;
 
-            LocalDateTime newEnd = departureDate
-                    .plusHours(totalHours)
-                    .plusMinutes(totalMinutes);
+            LocalDateTime newEnd = departureDate.plusHours(totalHours).plusMinutes(totalMinutes);
 
             for (Flight existingFlight : plane.getFlights()) {
                 LocalDateTime existingStart = existingFlight.getDepartureDate();
