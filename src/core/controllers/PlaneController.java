@@ -8,7 +8,7 @@ import core.controllers.utils.Response;
 import core.controllers.utils.Status;
 import core.models.Plane;
 import core.models.storage.StoragePlanes;
-import core.models.verifing.Verifing;
+import core.models.verifing.Verifying;
 
 /**
  *
@@ -19,10 +19,8 @@ public class PlaneController {
     public PlaneController() {
     }
 
-    public Response createPlane(String id, String brand, String model, String maxCapacity, String airline) {
-        StoragePlanes planeStorage = StoragePlanes.getInstance();
+    public static Response createPlane(String id, String brand, String model, String maxCapacity, String airline) {
         try {
-
             if (id.trim().equals("")) {
                 return new Response("The Id can't be empty", Status.BAD_REQUEST);
             }
@@ -33,7 +31,7 @@ public class PlaneController {
             }
 
             //Verify characters in the id
-            switch (Verifing.verifyPlaneId(id)) {
+            switch (Verifying.verifyPlaneId(id)) {
                 case 1:
                     return new Response("The last 5 characters of the Id must be numbers", Status.BAD_REQUEST);
                 case 2:
@@ -67,13 +65,20 @@ public class PlaneController {
                 return new Response("The capacity must be positve", Status.BAD_REQUEST);
             }
 
-            //All good
-            if (!planeStorage.add(new Plane(id, brand, model, intMaxCapacity, airline))) {
+            //Add to storage/Check if the if is taken
+            if (!addPlane(new Plane(id, brand, model, intMaxCapacity, airline))) {
                 return new Response("There's already a passenger with that Id", Status.BAD_REQUEST);
             }
+
+            //All good
             return new Response("Plane created succesfully", Status.CREATED);
         } catch (Exception e) {
             return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public static boolean addPlane(Plane plane) {
+        StoragePlanes planeStorage = StoragePlanes.getInstance();
+        return planeStorage.add(plane);
     }
 }

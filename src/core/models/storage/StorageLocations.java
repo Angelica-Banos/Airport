@@ -4,27 +4,37 @@
  */
 package core.models.storage;
 
+import core.models.Location;
+import java.util.ArrayList;
+
 /**
  *
  * @author Angie
  */
-public class StorageLocations implements Storage{
+public class StorageLocations implements Storage<Location>{
   private static StorageLocations instance;
-    
+  private ArrayList<Location> locations;
+  
     private StorageLocations(){
         instance = new StorageLocations();
+        this.locations = new ArrayList<>();
     }
     
-    @Override
-    public Storage getInstance() {
+    public static StorageLocations getInstance() {
         if(instance == null){
             instance = new StorageLocations();
         }
         return instance;
     }
+
     @Override
-    public boolean add() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean add(Location location) {
+        Location lc = this.get(location.getAirportId());
+         if(lc != null){
+                return false;
+            }
+        locations.add(location);
+        return true;
     }
 
     @Override
@@ -38,8 +48,12 @@ public class StorageLocations implements Storage{
     }
 
     @Override
-    public boolean get() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Location get(String id) {
+       for (Location lc : locations){
+            if(lc.getAirportId().equals(id)){
+                return lc;
+            }
+        }
+        return null;
     }
-    
 }

@@ -8,18 +8,16 @@ package core.models.verifing;
  *
  * @author Angie
  */
-public class Verifing {
+public class Verifying {
 
-    public Verifing() {
+    public Verifying() {
     }
     
     public static  int verifyPlaneId(String id){
         String letters = id.substring(0, 2);
         String numbers = id.substring(id.length()-5);
         
-        
-        boolean uppercase = Character.isUpperCase(letters.charAt(0)) && Character.isUpperCase(letters.charAt(1));
-        if(!uppercase){
+        if(!(Character.isUpperCase(letters.charAt(0)) && Character.isUpperCase(letters.charAt(1)))){
             return 2; //Both letters aren't in uppercase
         }
         
@@ -30,5 +28,12 @@ public class Verifing {
         }
         
         return 0; //Nice
+    }
+    
+    public static boolean checkAirportId(String id){
+        if(!(Character.isUpperCase(id.charAt(0)) && Character.isUpperCase(id.charAt(1)) && Character.isUpperCase(2))){
+            return false; //All letters aren't in uppercase
+        }
+        return true;
     }
 }

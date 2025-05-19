@@ -28,11 +28,10 @@ public class StoragePlanes implements Storage<Plane>{
     }
     @Override
     public boolean add(Plane plane) {
-        for(Plane pl : planes){
-            if(pl.getId().equals(plane.getId())){
+        Plane pl = this.get(plane.getId());
+            if(pl != null){
                 return false;
             }
-        }
         planes.add(plane);
         return true;
     }
