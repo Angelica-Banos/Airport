@@ -5,11 +5,13 @@
         <group>
             <file>file:/C:/Users/Angie/Desktop/Airport/src/main/Main.java</file>
             <file>file:/C:/Users/Angie/Desktop/Airport/src/core/controllers/utils/Status.java</file>
+            <file>file:/C:/Users/Angie/Desktop/Airport/src/core/controllers/PassengerController.java</file>
             <file>file:/C:/Users/Angie/Desktop/Airport/src/core/controllers/PlaneController.java</file>
             <file>file:/C:/Users/Angie/Desktop/Airport/src/core/models/persistency/ReadJSonLocation.java</file>
             <file>file:/C:/Users/Angie/Desktop/Airport/src/core/models/verifing/Verifing.java</file>
             <file>file:/C:/Users/Angie/Desktop/Airport/src/core/controllers/AirportController.java</file>
             <file>file:/C:/Users/Angie/Desktop/Airport/src/core/models/persistency/ReadJSonFlight.java</file>
+            <file>file:/C:/Users/Angie/Desktop/Airport/src/core/models/storage/StorageFlights.java</file>
             <file>file:/C:/Users/Angie/Desktop/Airport/src/core/models/persistency/ReadJSon.java</file>
             <file>file:/C:/Users/Angie/Desktop/Airport/src/core/controllers/utils/Response.java</file>
             <file>file:/C:/Users/Angie/Desktop/Airport/src/core/models/Plane.java</file>
