@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import org.netbeans.lib.awtextra.AbsoluteLayout;
+import org.netbeans.lib.awtextra.AbsoluteConstraints;
 
 
 /**
