@@ -12,8 +12,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReadJSONPassenger {
+public class ReadJSONPassenger  {
 
+    
     public static List<Passenger> readFromFile(String relativePath) {
         List<Passenger> passengers = new ArrayList<>();
 

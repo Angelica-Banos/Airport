@@ -4,7 +4,9 @@
  */
 package core.models.persistency;
 
+import core.models.Passenger;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -12,5 +14,5 @@ import java.util.ArrayList;
  * @author Angie
  */
 public interface ReadJSon {
-    ArrayList<String> read(String path);
+    List<Object> readFromFile(String relativePath);
 }
