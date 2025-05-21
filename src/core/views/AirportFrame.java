@@ -385,6 +385,11 @@ public class AirportFrame extends javax.swing.JFrame {
         jPanelPassagnerRegistration.add(txtPassangerId, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 90, 130, -1));
 
         txtPassangerYear.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        txtPassangerYear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPassangerYearActionPerformed(evt);
+            }
+        });
         jPanelPassagnerRegistration.add(txtPassangerYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 280, 90, -1));
 
         txtPassangerCountry.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
@@ -1730,6 +1735,10 @@ public class AirportFrame extends javax.swing.JFrame {
     private void txtPassangerIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassangerIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPassangerIdActionPerformed
+
+    private void txtPassangerYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassangerYearActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPassangerYearActionPerformed
 
     /**
      * @param args the command line arguments
