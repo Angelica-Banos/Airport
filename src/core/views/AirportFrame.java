@@ -10,6 +10,7 @@ import core.models.Passenger;
 import core.models.Plane;
 import core.models.storage.StorageLocations;
 import core.models.storage.StoragePassengers;
+import core.models.storage.StoragePlanes;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,6 +40,7 @@ public class AirportFrame extends javax.swing.JFrame {
         initComponents();
         cargarPassengers();
         cargarLocations();
+        cargarPlanes();
 
         this.passengers = new ArrayList<>();
         this.planes = new ArrayList<>();
@@ -71,6 +73,15 @@ public class AirportFrame extends javax.swing.JFrame {
             System.out.println("Locations cargados correctamente");            
         }else{
             System.out.println("No se pudieron cargar Locations");
+                    }  
+    }
+    private void cargarPlanes(){
+        boolean cargado = StoragePlanes.getInstance().loadFromJson("json/planes.json");
+
+        if(cargado){
+            System.out.println("Planes cargados correctamente");            
+        }else{
+            System.out.println("No se pudieron cargar Planes");
                     }  
     }
 

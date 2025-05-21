@@ -4,8 +4,18 @@
  */
 package core.models.storage;
 
+import core.models.Location;
+import core.models.Passenger;
 import core.models.Plane;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -13,11 +23,11 @@ import java.util.ArrayList;
  */
 public class StoragePlanes implements Storage<Plane>{
   private static StoragePlanes instance;
-  private ArrayList<Plane> planes;
+  private Map<String, Plane> planes;
   
   
     private StoragePlanes(){
-        this.planes = new ArrayList<>();
+        this.planes = new HashMap<>();
     }
     
     public static StoragePlanes getInstance() {
@@ -27,35 +37,85 @@ public class StoragePlanes implements Storage<Plane>{
         return instance;
     }
     @Override
-    public boolean add(Plane plane) {
-        Plane pl = this.get(plane.getId());
-            if(pl != null){
-                return false;
+    public boolean add(Object obj) {
+        if (obj instanceof Plane) {
+            Plane p = (Plane) obj;
+            if (!planes.containsKey(p.getId())) {
+                planes.put(p.getId(), p);
+                return true;
             }
-        planes.add(plane);
-        return true;
+        }
+        return false;
     }
 
     @Override
-    public boolean delete() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean delete(String id) {
+        try {
+            return planes.remove(id) != null;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
-    public boolean update() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean update(Object obj) {
+        if (obj instanceof Plane) {
+            Plane p = (Plane) obj;
+            if (planes.containsKey(p.getId())) {
+                planes.put(p.getId(), p);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public Plane get(String id) {
-        for (Plane pl : planes){
-            if(pl.getId().equals(id)){
-                return pl;
-            }
+        try {
+            return planes.get(id);
+        } catch (Exception e) {
+            return null;
         }
-        return null;
-    }
-
-
+    }   
     
+     @Override
+    public boolean loadFromJson(String resourcePath) {
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            try ( InputStream inputStream = classLoader.getResourceAsStream(resourcePath)) {
+                if (inputStream == null) {
+                    System.err.println("Recurso no encontrado: " + resourcePath);
+                    return false;
+                }
+
+                String content = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+                JSONArray jsonArray = new JSONArray(content);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+
+                String id = obj.getString("id");
+                String brand = obj.getString("brand");
+                String model = obj.getString("model");
+                int maxCapacity = obj.getInt("maxCapacity");
+                String airline = obj.getString("airline");
+
+                Plane plane = new Plane(
+                        id, brand, model, maxCapacity, airline
+                );
+
+
+                    planes.put(id, plane);
+                }
+
+                return true;
+            }
+        } catch (IOException e) {
+            System.err.println("Error leyendo el recurso: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error procesando JSON: " + e.getMessage());
+        }
+
+        return false;
+    }
 }

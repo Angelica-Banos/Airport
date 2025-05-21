@@ -13,9 +13,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReadJSonLocation  {
+public class ReadJSonLocation implements ReadJSon<Location>  {
 
-    public static List<Location> readFromFile(String relativePath) {
+    public List<Location> readFromFile(String relativePath) {
         List<Location> locations = new ArrayList<>();
 
         try {
