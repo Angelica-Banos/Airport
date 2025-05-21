@@ -15,9 +15,8 @@ import org.json.JSONTokener;
  *
  * @author Angie
  */
-public class ReadJSonFlight implements ReadJSon {
+public class ReadJSonFlight  {
 
-    @Override
     public ArrayList<String> read(String ruta) {
         ruta = "flights.json";
         ArrayList<String> result = new ArrayList<>();
