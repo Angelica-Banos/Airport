@@ -13,6 +13,6 @@ import java.util.List;
  *
  * @author Angie
  */
-public interface ReadJSon {
+public interface ReadJSon<Object>{
     List<Object> readFromFile(String relativePath);
 }
