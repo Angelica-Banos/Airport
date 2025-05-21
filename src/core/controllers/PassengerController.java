@@ -6,6 +6,7 @@ package core.controllers;
 
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
+import core.models.storage.StorageFlights;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,6 +20,7 @@ public class PassengerController {
 
     public Response createPassanger(long id, String firstname, String lastname, LocalDate birthDate, int countryPhoneCode, long phone, String country) {
         try {
+            StorageFlights storage = StorageFlights.getInstance();
             //Verify lenght of id
             String ids = String.valueOf(id);
             if (ids.length() < 1 || ids.length() > 15) {

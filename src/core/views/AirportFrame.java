@@ -8,6 +8,7 @@ import core.models.Flight;
 import core.models.Location;
 import core.models.Passenger;
 import core.models.Plane;
+import core.models.storage.StoragePassengers;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,6 +36,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     public AirportFrame() {
         initComponents();
+        cargarPasajeros();
 
         this.passengers = new ArrayList<>();
         this.planes = new ArrayList<>();
@@ -50,6 +52,18 @@ public class AirportFrame extends javax.swing.JFrame {
         this.generateMinutes();
         this.blockPanels();
     }
+    
+    private void cargarPasajeros(){
+        boolean cargado = StoragePassengers.getInstance().loadFromJson("json/passengers.json");
+
+        if(cargado){
+            System.out.println("Pasajeros cargados correctamente");            
+        }else{
+            System.out.println("No se pudieron cargar los pasajeros");
+                    }       
+    }
+
+
 
     private void blockPanels() {
         //9, 11

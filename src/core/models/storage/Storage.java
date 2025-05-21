@@ -8,10 +8,12 @@ package core.models.storage;
  *
  * @author Angie
  */
-public interface Storage<T> {
-    boolean add(T meow); 
-    boolean delete(); 
-    boolean update(); 
-    T get(String id); 
+public interface Storage<T> {  
+    T get(String id);
+    boolean add(Object obj);
+    boolean delete(String id);
+    boolean update(Object obj);
+    public boolean loadFromJson(String filepath);
+    
     
 }

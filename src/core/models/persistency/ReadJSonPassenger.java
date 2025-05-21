@@ -1,47 +1,56 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package core.models.persistency;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import core.models.Passenger;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-/**
- *
- * @author Angie
- */
-public class ReadJSonPassenger implements ReadJSon {
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-    @Override
-    public ArrayList<String> read(String ruta) {
-        ruta = "passengers.json";
-        ArrayList<String> result = new ArrayList<>();
-        try ( FileReader reader = new FileReader(ruta)) {
-            JSONTokener tokener = new JSONTokener(reader);
-            JSONArray passengersArray = new JSONArray(tokener);
+public class ReadJSONPassenger {
 
-            for (int i = 0; i < passengersArray.length(); i++) {
-                JSONObject passenger = passengersArray.getJSONObject(i);
-                String info = "ID: " + passenger.getInt("id")
-                        + ", firstname: " + passenger.getString("firstname")
-                        + ", lastname: " + passenger.getString("lastname")
-                        + ", birthDate: " + passenger.getString("birthDate")
-                        + ", countryPhoneCode: " + passenger.getInt("countryPhoneCode")
-                        + ", phone: " + passenger.getInt("phone") 
-                        + ", Country: " + passenger.getString("country");
-                result.add(info);
+    public static List<Passenger> readFromFile(String relativePath) {
+        List<Passenger> passengers = new ArrayList<>();
+
+        try {
+            File file = new File(relativePath);
+            if (!file.exists()) {
+                System.err.println("Archivo no encontrado: " + relativePath);
+                return passengers;
             }
+
+            String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+            JSONArray jsonArray = new JSONArray(content);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+
+                long id = obj.getLong("id");
+                String firstname = obj.getString("firstname");
+                String lastname = obj.getString("lastname");
+                LocalDate birthDate = LocalDate.parse(obj.getString("birthDate"));
+                int countryPhoneCode = obj.getInt("countryPhoneCode");
+                long phone = obj.getLong("phone");
+                String country = obj.getString("country");
+
+                Passenger passenger = new Passenger(
+                        id, firstname, lastname, birthDate, countryPhoneCode, phone, country
+                );
+
+                passengers.add(passenger);
+            }
+
         } catch (IOException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
+            System.err.println("Error leyendo el archivo: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("Error al procesar el archivo JSON: " + e.getMessage());
+            System.err.println("Error procesando JSON: " + e.getMessage());
         }
-        return result;
+
+        return passengers;
     }
 }
