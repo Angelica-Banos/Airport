@@ -13,10 +13,10 @@ import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import javax.swing.UIManager;
+//import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
-import org.netbeans.lib.awtextra.AbsoluteLayout;
-import org.netbeans.lib.awtextra.AbsoluteConstraints;
+//import org.netbeans.lib.AbsoluteLayout;
+//import org.netbeans.lib.awtextra.AbsoluteConstraints;
 
 
 /**
@@ -366,6 +366,11 @@ public class AirportFrame extends javax.swing.JFrame {
         jPanelPassagnerRegistration.add(txtPassangerCountryCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 340, 50, -1));
 
         txtPassangerId.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        txtPassangerId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPassangerIdActionPerformed(evt);
+            }
+        });
         jPanelPassagnerRegistration.add(txtPassangerId, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 90, 130, -1));
 
         txtPassangerYear.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
@@ -1464,6 +1469,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void btnPassangerRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPassangerRegisterActionPerformed
         // TODO add your handling code here:
+        
         long id = Long.parseLong(txtPassangerId.getText());
         String firstname = txtPassangerFirstName.getText();
         String lastname = txtPassangerLastName.getText();
@@ -1709,6 +1715,10 @@ public class AirportFrame extends javax.swing.JFrame {
     private void cbFlightPlaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFlightPlaneActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbFlightPlaneActionPerformed
+
+    private void txtPassangerIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassangerIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPassangerIdActionPerformed
 
     /**
      * @param args the command line arguments
