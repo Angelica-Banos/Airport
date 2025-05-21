@@ -48,35 +48,75 @@ public class StorageLocations implements Storage<Location> {
         return false;
     }
 
-
     @Override
     public Location get(String id) {
         try {
             return locations.get(id);
-        } catch (NotFoundException e) {
+        } catch (Exception e) {
             return null;
         }
     }
 
-   
     @Override
     public boolean delete(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return locations.remove(id) != null;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public boolean update(Object obj) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (obj instanceof Location) {
+            Location lc = (Location) obj;
+            if (locations.containsKey(lc.getAirportId())) {
+                locations.put(lc.getAirportId(), lc);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    public boolean loadFromJson(String filepath) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean loadFromJson(String resourcePath) {
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            try ( InputStream inputStream = classLoader.getResourceAsStream(resourcePath)) {
+                if (inputStream == null) {
+                    System.err.println("Recurso no encontrado: " + resourcePath);
+                    return false;
+                }
 
+                String content = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+                JSONArray jsonArray = new JSONArray(content);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+
+                    String airportId = obj.getString("airportId");
+                    String airportName = obj.getString("airportName");
+                    String airportCity = obj.getString("airportCity");
+                    String airportCountry = obj.getString("airportCountry");
+                    long airportLatitude = obj.getLong("airportLatitude");
+                    long airportLongitude = obj.getLong("airportLatitude");
+
+                    Location location = new Location(
+                            airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude
+                    );
+
+                    locations.put(airportId, location);
+                }
+
+                return true;
+            }
+        } catch (IOException e) {
+            System.err.println("Error leyendo el recurso: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error procesando JSON: " + e.getMessage());
+        }
+
+        return false;
     }
 
-    @Override
-    public boolean add(Object obj) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }
