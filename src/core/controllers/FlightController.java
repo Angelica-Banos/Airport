@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public class FlightController {
 
-    public Response createfligth(String id, Plane plane, Location departureLocation, Location scaleLocation,
+    public  static Response createfligth(String id, Plane plane, Location departureLocation, Location scaleLocation,
             Location arrivalLocation, LocalDateTime departureDate,
             int hoursDurationArrival, int minutesDurationArrival,
             int hoursDurationScale, int minutesDurationScale) {

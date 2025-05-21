@@ -81,4 +81,9 @@ public class PlaneController {
         StoragePlanes planeStorage = StoragePlanes.getInstance();
         return planeStorage.add(plane);
     }
+    
+    public static boolean fillStorage(){
+        StoragePlanes planeStorage = StoragePlanes.getInstance();
+        ReadJSonPlane readJson = new ReadJSonPlane();
+    }
 }
