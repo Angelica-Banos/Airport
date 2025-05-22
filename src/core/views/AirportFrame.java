@@ -82,7 +82,7 @@ public class AirportFrame extends javax.swing.JFrame {
     }
 
     private void cargarFlight() {
-        boolean cargado = StorageFlights.getInstance().loadFromJson("json/flights.json");
+        boolean cargado = StorageFlights.getInstance().loadFromJson("src/json/flights.json");
 
         if (cargado) {
             System.out.println("Flights cargados correctamente");
