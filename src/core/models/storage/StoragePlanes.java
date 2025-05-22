@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,10 +27,12 @@ public class StoragePlanes implements Storage<Plane>{
   private Map<String, Plane> planes;
   
   
-    private StoragePlanes(){
+    public StoragePlanes(){
         this.planes = new HashMap<>();
     }
-    
+    public Map<String, Plane> getAll() {
+        return this.planes;
+    }
     public static StoragePlanes getInstance() {
         if(instance == null){
             instance = new StoragePlanes();

@@ -8,6 +8,7 @@ import core.models.Flight;
 import core.models.Location;
 import core.models.Passenger;
 import core.models.Plane;
+import core.models.storage.StorageFlights;
 import core.models.storage.StorageLocations;
 import core.models.storage.StoragePassengers;
 import core.models.storage.StoragePlanes;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 //import org.netbeans.lib.AbsoluteLayout;
 //import org.netbeans.lib.awtextra.AbsoluteConstraints;
-
 
 /**
  *
@@ -41,6 +41,7 @@ public class AirportFrame extends javax.swing.JFrame {
         cargarPassengers();
         cargarLocations();
         cargarPlanes();
+        cargarFlight();
 
         this.passengers = new ArrayList<>();
         this.planes = new ArrayList<>();
@@ -56,36 +57,47 @@ public class AirportFrame extends javax.swing.JFrame {
         this.generateMinutes();
         this.blockPanels();
     }
-    
-    private void cargarPassengers(){
+
+    private void cargarPassengers() {
         boolean cargado = StoragePassengers.getInstance().loadFromJson("json/passengers.json");
 
-        if(cargado){
-            System.out.println("Pasajeros cargados correctamente");            
-        }else{
+        if (cargado) {
+            System.out.println("Pasajeros cargados correctamente");
+        } else {
             System.out.println("No se pudieron cargar los pasajeros");
-                    }       
+        }
     }
-    private void cargarLocations(){
+
+    private void cargarLocations() {
         boolean cargado = StorageLocations.getInstance().loadFromJson("json/locations.json");
 
-        if(cargado){
-            System.out.println("Locations cargados correctamente");            
-        }else{
+        if (cargado) {
+            System.out.println("Locations cargados correctamente");
+        } else {
             System.out.println("No se pudieron cargar Locations");
-                    }  
+        }
     }
-    private void cargarPlanes(){
+
+    private void cargarFlight() {
+    boolean cargado = StorageFlights.getInstance().loadFromJson("json/flights.json");
+
+    if (cargado) {
+        System.out.println("Flights cargados correctamente");
+    } else {
+        System.out.println("No se pudieron cargar Flights");
+    }
+}
+
+
+    private void cargarPlanes() {
         boolean cargado = StoragePlanes.getInstance().loadFromJson("json/planes.json");
 
-        if(cargado){
-            System.out.println("Planes cargados correctamente");            
-        }else{
+        if (cargado) {
+            System.out.println("Planes cargados correctamente");
+        } else {
             System.out.println("No se pudieron cargar Planes");
-                    }  
+        }
     }
-
-
 
     private void blockPanels() {
         //9, 11
@@ -1470,12 +1482,12 @@ public class AirportFrame extends javax.swing.JFrame {
 
         }
         for (int i = 1; i < tabbedPane.getTabCount(); i++) {
-                tabbedPane.setEnabledAt(i, true);
+            tabbedPane.setEnabledAt(i, true);
         }
         tabbedPane.setEnabledAt(5, false);
         tabbedPane.setEnabledAt(6, false);
         tabbedPane.setEnabledAt(7, false);
-        
+
     }//GEN-LAST:event_radioButtonAdminActionPerformed
 
     private void radioButtonUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonUserActionPerformed
@@ -1496,7 +1508,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void btnPassangerRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPassangerRegisterActionPerformed
         // TODO add your handling code here:
-        
+
         long id = Long.parseLong(txtPassangerId.getText());
         String firstname = txtPassangerFirstName.getText();
         String lastname = txtPassangerLastName.getText();
@@ -1723,11 +1735,10 @@ public class AirportFrame extends javax.swing.JFrame {
     private void cbSelectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSelectUserActionPerformed
         try {
             String id = cbSelectUser.getSelectedItem().toString();
-            if (! id.equals(cbSelectUser.getItemAt(0))) {
+            if (!id.equals(cbSelectUser.getItemAt(0))) {
                 txtUpdInfoId.setText(id);
                 txtAddFlightId.setText(id);
-            }
-            else{
+            } else {
                 txtUpdInfoId.setText("");
                 txtAddFlightId.setText("");
             }
@@ -1754,7 +1765,6 @@ public class AirportFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane PaneShowMyFlights;

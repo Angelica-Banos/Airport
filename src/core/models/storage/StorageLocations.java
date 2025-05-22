@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -76,6 +77,10 @@ public class StorageLocations implements Storage<Location> {
             }
         }
         return false;
+    }
+
+    public Map<String, Location> getAll() {
+        return this.locations;
     }
 
     @Override

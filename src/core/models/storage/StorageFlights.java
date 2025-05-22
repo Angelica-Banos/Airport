@@ -1,16 +1,22 @@
 package core.models.storage;
 
+
 import core.models.Flight;
+import core.models.Plane;
+import core.models.persistency.ReadJSonFlight;
+import core.models.storage.StorageLocations;
+import core.models.storage.StoragePlanes;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StorageFlights {
-
     private static StorageFlights instance;
-    private List<Flight> flights;
+    private Map<String, Flight> flightsMap;
 
     private StorageFlights() {
-        flights = new ArrayList<>();
+        this.flightsMap = new HashMap<>();
     }
 
     public static StorageFlights getInstance() {
@@ -20,24 +26,37 @@ public class StorageFlights {
         return instance;
     }
 
-    public boolean add(Flight flight) {
-        if (!exists(flight.getId())) {
-            flights.add(flight);
-            return true;
+    public boolean loadFromJson(String path) {
+        List<Plane> planes = new ArrayList<>(StoragePlanes.getInstance().getAll().values());
+        List<Location> locations = new ArrayList<>(StorageLocations.getInstance().getAll().values());
+
+        ReadJSonFlight reader = new ReadJSonFlight(planes, locations);
+        List<Flight> flightsList = reader.readFromFile(path);
+
+        if (flightsList == null || flightsList.isEmpty()) {
+            return false;
         }
-        return false;
+
+        for (Flight flight : flightsList) {
+            this.flights.put(flight.getId(), flight);
+        }
+
+        return true;
+        }
+
+        return !flights.isEmpty();
     }
 
-    public boolean exists(String id) {
-        for (Flight flight : flights) {
-            if (flight.getId().equals(id)) {
-                return true;
-            }
-        }
-        return false;
+    public Map<String, Flight> getAll() {
+        return this.flightsMap;
     }
 
-    public List<Flight> getAll() {
-        return flights;
+    public List<Flight> getAllAsList() {
+        return new ArrayList<>(this.flightsMap.values());
+    }
+
+    public Flight getById(String id) {
+        return this.flightsMap.get(id);
     }
 }
+
