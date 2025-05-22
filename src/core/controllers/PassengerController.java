@@ -10,6 +10,8 @@ import core.models.Passenger;
 import core.models.storage.StorageFlights;
 import core.models.storage.StoragePassengers;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -138,22 +140,43 @@ public class PassengerController {
             if (!(intCountryPhoneCode >= 0)) {
                 return new Response("The country phone code must be positive.", Status.BAD_REQUEST);
             }
-            
+
             //Verify that the id isn't taken
-             if (!addPassenger(new Passenger(intId, firstname, lastname, birthDate, intCountryPhoneCode, intId, country))) {
+            if (!addPassenger(new Passenger(intId, firstname, lastname, birthDate, intCountryPhoneCode, intId, country))) {
                 return new Response("There's already a passenger with that Id", Status.BAD_REQUEST);
             }
 
-             //All good
+            //All good
             return new Response("Passenger created successfully", Status.CREATED);
 
         } catch (Exception e) {
             return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     public static boolean addPassenger(Passenger passenger) {
         StoragePassengers storagePlassengers = StoragePassengers.getInstance();
         return storagePlassengers.add(passenger);
     }
+
+    public static List<Object[]> getPassengerTableData() {
+        StoragePassengers storage = StoragePassengers.getInstance();
+        List<Object[]> tableData = new ArrayList<>();
+
+        for (Passenger p : storage.getAll()) {
+            Object[] row = {
+                p.getId(),
+                p.getFullname(),
+                p.getBirthDate(),
+                p.calculateAge(),
+                p.generateFullPhone(),
+                p.getCountry(),
+                p.getNumFlights()
+            };
+            tableData.add(row);
+        }
+
+        return tableData;
+    }
+
 }

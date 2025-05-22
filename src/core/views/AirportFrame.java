@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 //import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -1536,11 +1537,10 @@ public class AirportFrame extends javax.swing.JFrame {
             txtPassangerCountryCode.setText("");
             txtPassangerPhoneNumber.setText("");
             txtPassangerCountry.setText("");
-            this.cbSelectUser.addItem( id);
+            this.cbSelectUser.addItem(id);
         }
 
 
-        
     }//GEN-LAST:event_btnPassangerRegisterActionPerformed
 
     private void btnAirplaneCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAirplaneCreateActionPerformed
@@ -1717,6 +1717,16 @@ public class AirportFrame extends javax.swing.JFrame {
         for (Passenger passenger : this.passengers) {
             model.addRow(new Object[]{passenger.getId(), passenger.getFullname(), passenger.getBirthDate(), passenger.calculateAge(), passenger.generateFullPhone(), passenger.getCountry(), passenger.getNumFlights()});
         }
+
+        List<Object[]> datos = PassengerController.getPassengerTableData();
+        DefaultTableModel modelo = (DefaultTableModel) tableShowAllPassengers.getModel();
+        modelo.setRowCount(0); // Limpiar tabla
+
+        for (Object[] fila : datos) {
+            modelo.addRow(fila);
+        }
+
+
     }//GEN-LAST:event_btnShowAllPassengersRefreshActionPerformed
 
     private void btnShowAllFlightsRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllFlightsRefreshActionPerformed
