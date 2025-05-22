@@ -156,4 +156,8 @@ public class PassengerController {
         StoragePassengers storagePlassengers = StoragePassengers.getInstance();
         return storagePlassengers.add(passenger);
     }
+
+
+    
+    
 }

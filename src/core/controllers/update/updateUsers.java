@@ -3,11 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package core.controllers.update;
+import core.models.Passenger;
+import core.views.AirportFrame;
+
 
 /**
  *
  * @author Angie
  */
-public class updateUsers {
-    
+public class UpdateUsers {
+    public static void newPassengerMade(Passenger passenger){
+        AirportFrame
+    }
 }

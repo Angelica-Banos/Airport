@@ -1765,8 +1765,13 @@ public class AirportFrame extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jButton13ActionPerformed
 
+
+    
+    public void addCbSelectUser(String id){
+        this.cbSelectUser.addItem(id);
+    }
     private void cbSelectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSelectUserActionPerformed
-        try {
+       
             String id = cbSelectUser.getSelectedItem().toString();
             if (!id.equals(cbSelectUser.getItemAt(0))) {
                 txtUpdInfoId.setText(id);
@@ -1775,8 +1780,7 @@ public class AirportFrame extends javax.swing.JFrame {
                 txtUpdInfoId.setText("");
                 txtAddFlightId.setText("");
             }
-        } catch (Exception e) {
-        }
+        
     }//GEN-LAST:event_cbSelectUserActionPerformed
 
     private void cbPassangerMonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPassangerMonthActionPerformed

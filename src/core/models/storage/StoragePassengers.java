@@ -1,14 +1,13 @@
 package core.models.storage;
 
 import core.models.Passenger;
+import core.models.observers.PassengerObserver;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,6 +83,7 @@ public class StoragePassengers implements Storage<Passenger> {
     public boolean add(Passenger passenger) {
             if (!passengers.containsKey(passenger.getId())) {
                 passengers.put(passenger.getId(), passenger);
+                this.notifyObserver(passenger);
                 return true;
             }
         return false;
@@ -108,5 +108,11 @@ public class StoragePassengers implements Storage<Passenger> {
             }
         }
         return false;
+    }
+
+    @Override
+    public void notifyObserver(Passenger passenger) {
+      PassengerObserver passengerObserver = new PassengerObserver();
+      passengerObserver.update(passenger);
     }
 }

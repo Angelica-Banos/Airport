@@ -9,5 +9,5 @@ package core.models.observers;
  * @author Angie
  */
 public interface Observer<T> {
-    void update(T obj);
+    public void update(T obj);
 }
