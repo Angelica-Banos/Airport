@@ -22,31 +22,32 @@ import org.json.JSONObject;
  *
  * @author Angie
  */
-public class StoragePlanes implements Storage<Plane>{
-  private static StoragePlanes instance;
-  private Map<String, Plane> planes;
-  
-  
-    public StoragePlanes(){
+public class StoragePlanes implements Storage<Plane> {
+
+    private static StoragePlanes instance;
+    private Map<String, Plane> planes;
+
+    public StoragePlanes() {
         this.planes = new HashMap<>();
     }
+
     public Map<String, Plane> getAll() {
         return this.planes;
     }
+
     public static StoragePlanes getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new StoragePlanes();
         }
         return instance;
     }
+
     @Override
-    public boolean add(Object obj) {
-        if (obj instanceof Plane) {
-            Plane p = (Plane) obj;
-            if (!planes.containsKey(p.getId())) {
-                planes.put(p.getId(), p);
-                return true;
-            }
+    public boolean add(Plane plane) {
+        Plane p = (Plane) plane;
+        if (!planes.containsKey(p.getId())) {
+            planes.put(p.getId(), p);
+            return true;
         }
         return false;
     }
@@ -61,9 +62,9 @@ public class StoragePlanes implements Storage<Plane>{
     }
 
     @Override
-    public boolean update(Object obj) {
-        if (obj instanceof Plane) {
-            Plane p = (Plane) obj;
+    public boolean update(Plane plane) {
+        if (plane instanceof Plane) {
+            Plane p = (Plane) plane;
             if (planes.containsKey(p.getId())) {
                 planes.put(p.getId(), p);
                 return true;
@@ -79,9 +80,9 @@ public class StoragePlanes implements Storage<Plane>{
         } catch (Exception e) {
             return null;
         }
-    }   
-    
-     @Override
+    }
+
+    @Override
     public boolean loadFromJson(String resourcePath) {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
@@ -97,16 +98,15 @@ public class StoragePlanes implements Storage<Plane>{
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
 
-                String id = obj.getString("id");
-                String brand = obj.getString("brand");
-                String model = obj.getString("model");
-                int maxCapacity = obj.getInt("maxCapacity");
-                String airline = obj.getString("airline");
+                    String id = obj.getString("id");
+                    String brand = obj.getString("brand");
+                    String model = obj.getString("model");
+                    int maxCapacity = obj.getInt("maxCapacity");
+                    String airline = obj.getString("airline");
 
-                Plane plane = new Plane(
-                        id, brand, model, maxCapacity, airline
-                );
-
+                    Plane plane = new Plane(
+                            id, brand, model, maxCapacity, airline
+                    );
 
                     planes.put(id, plane);
                 }
@@ -121,4 +121,5 @@ public class StoragePlanes implements Storage<Plane>{
 
         return false;
     }
+
 }

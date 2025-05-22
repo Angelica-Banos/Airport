@@ -4,6 +4,8 @@
  */
 package core.views;
 
+import core.controllers.PassengerController;
+import core.controllers.utils.Response;
 import core.models.Flight;
 import core.models.Location;
 import core.models.Passenger;
@@ -16,6 +18,7 @@ import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 //import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 //import org.netbeans.lib.AbsoluteLayout;
@@ -79,15 +82,14 @@ public class AirportFrame extends javax.swing.JFrame {
     }
 
     private void cargarFlight() {
-    boolean cargado = StorageFlights.getInstance().loadFromJson("json/flights.json");
+        boolean cargado = StorageFlights.getInstance().loadFromJson("json/flights.json");
 
-    if (cargado) {
-        System.out.println("Flights cargados correctamente");
-    } else {
-        System.out.println("No se pudieron cargar Flights");
+        if (cargado) {
+            System.out.println("Flights cargados correctamente");
+        } else {
+            System.out.println("No se pudieron cargar Flights");
+        }
     }
-}
-
 
     private void cargarPlanes() {
         boolean cargado = StoragePlanes.getInstance().loadFromJson("json/planes.json");
@@ -1508,21 +1510,37 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void btnPassangerRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPassangerRegisterActionPerformed
         // TODO add your handling code here:
-
-        long id = Long.parseLong(txtPassangerId.getText());
+        String id = txtPassangerId.getText();
         String firstname = txtPassangerFirstName.getText();
         String lastname = txtPassangerLastName.getText();
-        int year = Integer.parseInt(txtPassangerYear.getText());
-        int month = Integer.parseInt(cbPassangerMonth.getItemAt(cbPassangerMonth.getSelectedIndex()));
-        int day = Integer.parseInt(cbPassangerDay.getItemAt(cbPassangerDay.getSelectedIndex()));
-        int phoneCode = Integer.parseInt(txtPassangerCountryCode.getText());
-        long phone = Long.parseLong(txtPassangerPhoneNumber.getText());
+        String year = txtPassangerYear.getText();
+        String month = cbPassangerMonth.getItemAt(cbPassangerMonth.getSelectedIndex());
+        String day = cbPassangerDay.getItemAt(cbPassangerDay.getSelectedIndex());
+        String countryPhoneCode = txtPassangerCountryCode.getText();
+        String phone = txtPassangerPhoneNumber.getText();
         String country = txtPassangerCountry.getText();
+        Response response = PassengerController.createPassanger(id, firstname, lastname, year, month, day, countryPhoneCode, phone, country);
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
 
-        LocalDate birthDate = LocalDate.of(year, month, day);
+            txtPassangerId.setText("");
+            txtPassangerFirstName.setText("");
+            txtPassangerLastName.setText("");
+            txtPassangerYear.setText("");
+            cbPassangerMonth.setSelectedIndex(-1);
+            cbPassangerDay.setSelectedIndex(-1);
+            txtPassangerCountryCode.setText("");
+            txtPassangerPhoneNumber.setText("");
+            txtPassangerCountry.setText("");
+            this.cbSelectUser.addItem( id);
+        }
 
-        this.passengers.add(new Passenger(id, firstname, lastname, birthDate, phoneCode, phone, country));
-        this.cbSelectUser.addItem("" + id);
+
+        
     }//GEN-LAST:event_btnPassangerRegisterActionPerformed
 
     private void btnAirplaneCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAirplaneCreateActionPerformed

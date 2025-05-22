@@ -81,14 +81,11 @@ public class StoragePassengers implements Storage<Passenger> {
     }
 
     @Override
-    public boolean add(Object obj) {
-        if (obj instanceof Passenger) {
-            Passenger p = (Passenger) obj;
-            if (!passengers.containsKey(p.getId())) {
-                passengers.put(p.getId(), p);
+    public boolean add(Passenger passenger) {
+            if (!passengers.containsKey(passenger.getId())) {
+                passengers.put(passenger.getId(), passenger);
                 return true;
             }
-        }
         return false;
     }
 
@@ -102,7 +99,7 @@ public class StoragePassengers implements Storage<Passenger> {
     }
 
     @Override
-    public boolean update(Object obj) {
+    public boolean update(Passenger obj) {
         if (obj instanceof Passenger) {
             Passenger p = (Passenger) obj;
             if (passengers.containsKey(p.getId())) {

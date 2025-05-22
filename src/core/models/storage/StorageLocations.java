@@ -38,9 +38,9 @@ public class StorageLocations implements Storage<Location> {
     }
 
     @Override
-    public boolean add(Object obj) {
-        if (obj instanceof Location) {
-            Location lc = (Location) obj;
+    public boolean add(Location location) {
+        if (location instanceof Location) {
+            Location lc = (Location) location;
             if (!locations.containsKey(lc.getAirportId())) {
                 locations.put(lc.getAirportId(), lc);
                 return true;
@@ -68,13 +68,10 @@ public class StorageLocations implements Storage<Location> {
     }
 
     @Override
-    public boolean update(Object obj) {
-        if (obj instanceof Location) {
-            Location lc = (Location) obj;
-            if (locations.containsKey(lc.getAirportId())) {
-                locations.put(lc.getAirportId(), lc);
-                return true;
-            }
+    public boolean update(Location location) {
+        if (locations.containsKey(location.getAirportId())) {
+            locations.put(location.getAirportId(), location);
+            return true;
         }
         return false;
     }
@@ -97,20 +94,18 @@ public class StorageLocations implements Storage<Location> {
                 JSONArray jsonArray = new JSONArray(content);
 
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject obj = jsonArray.getJSONObject(i);
+                    JSONObject location = jsonArray.getJSONObject(i);
 
-                    String airportId = obj.getString("airportId");
-                    String airportName = obj.getString("airportName");
-                    String airportCity = obj.getString("airportCity");
-                    String airportCountry = obj.getString("airportCountry");
-                    long airportLatitude = obj.getLong("airportLatitude");
-                    long airportLongitude = obj.getLong("airportLatitude");
+                    String airportId = location.getString("airportId");
+                    String airportName = location.getString("airportName");
+                    String airportCity = location.getString("airportCity");
+                    String airportCountry = location.getString("airportCountry");
+                    long airportLatitude = location.getLong("airportLatitude");
+                    long airportLongitude = location.getLong("airportLatitude");
 
-                    Location location = new Location(
-                            airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude
-                    );
+                    Location obj = new Location(airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude );
 
-                    locations.put(airportId, location);
+                    locations.put(airportId, obj);
                 }
 
                 return true;

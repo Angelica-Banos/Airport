@@ -6,11 +6,10 @@ package core.controllers;
 
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
+import core.models.Passenger;
 import core.models.storage.StorageFlights;
+import core.models.storage.StoragePassengers;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 /**
  *
@@ -53,23 +52,61 @@ public class PassengerController {
             if (lastname.trim().equals("")) {
                 return new Response("Last name must not be empty", Status.BAD_REQUEST);
             }
-            if (country.trim().equals("")) {
-                return new Response("Country must not be empty", Status.BAD_REQUEST);
-            }
+
             if (countryPhoneCode.trim().equals("")) {
                 return new Response("Country phone code must not be empty", Status.BAD_REQUEST);
             }
             if (phone.trim().equals("")) {
                 return new Response("Phone number must not be empty", Status.BAD_REQUEST);
             }
+            if (country.trim().equals("")) {
+                return new Response("Country must not be empty", Status.BAD_REQUEST);
+            }
 
+            // Validar  que el año, mes y días sean números
+            int intYear, intMonth, intDay;
+            try {
+                intYear = Integer.parseInt(year);
+            } catch (NumberFormatException ex) {
+                return new Response("The birth year must be a number", Status.BAD_REQUEST);
+            }
+            try {
+                intMonth = Integer.parseInt(month);
+            } catch (NumberFormatException ex) {
+                return new Response("The birth month must be a number", Status.BAD_REQUEST);
+            }
+            try {
+                intDay = Integer.parseInt(day);
+            } catch (NumberFormatException ex) {
+                return new Response("The birth day must be a number", Status.BAD_REQUEST);
+            }
+            //Validar que sea el año, mes y días sean enteros positivos
+            if (!(intYear >= 0)) {
+                return new Response("The birth year must be positive", Status.BAD_REQUEST);
+            }
+            if (!(intMonth >= 0)) {
+                return new Response("The birth month must be positive", Status.BAD_REQUEST);
+            }
+            if (!(intDay >= 0)) {
+                return new Response("The birth day must be positive. (how???)", Status.BAD_REQUEST);
+            }
+            //Crear Birthdate
+            LocalDate birthDate;
+            birthDate = LocalDate.of(intYear, intMonth, intDay);
+            //  Validar que birthDate no sea en el futuro
+            if (birthDate == null) {
+                return new Response("Birth date must not be null", Status.INTERNAL_SERVER_ERROR);
+            }
+            if (birthDate.isAfter(LocalDate.now())) {
+                return new Response("Birth date cannot be in the future", Status.INTERNAL_SERVER_ERROR);
+            }
             try {
                 //Verify length of phone
                 if (phone.trim().length() < 1 || phone.trim().length() > 11) {
                     return new Response("The length of the phone number must be between 1 and 11 numbers", Status.BAD_REQUEST);
                 }
 
-                //Verify that hpone is number
+                //Verify that phone is number
                 int intPhone;
                 try {
                     intPhone = Integer.parseInt(phone);
@@ -101,48 +138,22 @@ public class PassengerController {
             if (!(intCountryPhoneCode >= 0)) {
                 return new Response("The country phone code must be positive.", Status.BAD_REQUEST);
             }
-            // Validar  que el año, mes y días sean números
-            int intYear, intMonth, intDay;
-            try {
-                intYear = Integer.parseInt(year);
-            } catch (NumberFormatException ex) {
-                return new Response("The birth year must be a number", Status.BAD_REQUEST);
-            }
-            try {
-                intMonth = Integer.parseInt(month);
-            } catch (NumberFormatException ex) {
-                return new Response("The birth month must be a number", Status.BAD_REQUEST);
-            }
-            try {
-                intDay = Integer.parseInt(day);
-            } catch (NumberFormatException ex) {
-                return new Response("The birth day must be a number", Status.BAD_REQUEST);
-            }
-            //Validar que sea el año, mes y días sean enteros positivos
-            if (!(intYear >= 0)) {
-                return new Response("The birth year must be positive", Status.BAD_REQUEST);
-            }
-            if (!(intMonth >= 0)) {
-                return new Response("The birth month must be positive", Status.BAD_REQUEST);
-            }
-            if (!(intDay >= 0)) {
-                return new Response("The birth day must be positive. (how???)", Status.BAD_REQUEST);
-            }
-            //Crear Birthdate
-            LocalDate birthDate;
-            birthDate =  LocalDate.of(intYear, intMonth, intDay);
-            //  Validar que birthDate no sea en el futuro
-            if (birthDate == null) {
-                return new Response("Birth date must not be null", Status.INTERNAL_SERVER_ERROR);
-            }
-            if (birthDate.isAfter(LocalDate.now())) {
-                return new Response("Birth date cannot be in the future", Status.INTERNAL_SERVER_ERROR);
+            
+            //Verify that the id isn't taken
+             if (!addPassenger(new Passenger(intId, firstname, lastname, birthDate, intCountryPhoneCode, intId, country))) {
+                return new Response("There's already a passenger with that Id", Status.BAD_REQUEST);
             }
 
+             //All good
             return new Response("Passenger created successfully", Status.CREATED);
 
         } catch (Exception e) {
             return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
         }
+    }
+    
+    public static boolean addPassenger(Passenger passenger) {
+        StoragePassengers storagePlassengers = StoragePassengers.getInstance();
+        return storagePlassengers.add(passenger);
     }
 }

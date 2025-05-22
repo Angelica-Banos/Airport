@@ -10,9 +10,9 @@ package core.models.storage;
  */
 public interface Storage<T> {  
     T get(String id);
-    boolean add(Object obj);
+    boolean add(T obj);
     boolean delete(String id);
-    boolean update(Object obj);
+    boolean update(T obj);
     public boolean loadFromJson(String filepath);
     
     

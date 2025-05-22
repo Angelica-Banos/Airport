@@ -7,6 +7,7 @@ package core.controllers;
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
 import core.models.Plane;
+import core.models.persistency.ReadJSonPlane;
 import core.models.storage.StoragePlanes;
 import core.models.verifing.Verifying;
 
@@ -67,7 +68,7 @@ public class PlaneController {
 
             //Add to storage/Check if the if is taken
             if (!addPlane(new Plane(id, brand, model, intMaxCapacity, airline))) {
-                return new Response("There's already a passenger with that Id", Status.BAD_REQUEST);
+                return new Response("There's already a plane with that Id", Status.BAD_REQUEST);
             }
 
             //All good
@@ -85,5 +86,6 @@ public class PlaneController {
     public static boolean fillStorage(){
         StoragePlanes planeStorage = StoragePlanes.getInstance();
         ReadJSonPlane readJson = new ReadJSonPlane();
+        
     }
 }
