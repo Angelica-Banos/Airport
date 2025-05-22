@@ -15,7 +15,7 @@ public class PassengerObserver implements Observer<Passenger>{
 
     @Override
     public void update(Passenger passenger) {
-        UpdateUsers.newPassengerMade(passenger);
+        UpdateUsers.getUpdateUsers().newPassengerMade(passenger);
     }
     
 }

@@ -7,6 +7,7 @@ package core.views;
 import core.controllers.FlightController;
 import core.controllers.PassengerController;
 import core.controllers.PlaneController;
+import core.controllers.update.UpdateUsers;
 import core.controllers.utils.Response;
 import core.models.Flight;
 import core.models.Location;
@@ -36,6 +37,7 @@ public class AirportFrame extends javax.swing.JFrame {
     /**
      * Creates new form AirportFrame
      */
+
     private int x, y;
     private ArrayList<Passenger> passengers;
     private ArrayList<Plane> planes;
@@ -43,6 +45,8 @@ public class AirportFrame extends javax.swing.JFrame {
     private ArrayList<Flight> flights;
 
     public AirportFrame() {
+        UpdateUsers.getUpdateUsers(this);
+
         initComponents();
         cargarPassengers();
         cargarLocations();
@@ -63,7 +67,6 @@ public class AirportFrame extends javax.swing.JFrame {
         this.generateMinutes();
         this.blockPanels();
 
-        //UpdateUsers = new updateUsers(this);
     }
 
     private void cargarPassengers() {
@@ -1546,7 +1549,7 @@ public class AirportFrame extends javax.swing.JFrame {
             txtPassangerCountryCode.setText("");
             txtPassangerPhoneNumber.setText("");
             txtPassangerCountry.setText("");
-            this.cbSelectUser.addItem(id);
+
         }
 
 

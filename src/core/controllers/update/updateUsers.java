@@ -19,13 +19,13 @@ public class UpdateUsers {
         this.view = airportFrame;
     }
     
-    public UpdateUsers getUpdateUsers(AirportFrame airportFrame){
+    public static UpdateUsers getUpdateUsers(AirportFrame airportFrame){
         if (instance == null) {
             instance = new UpdateUsers(airportFrame);
         } 
         return instance;
     }
-    public UpdateUsers getUpdateUsers(){
+    public static UpdateUsers getUpdateUsers(){
         if (instance == null) {
            return null;
         } 
@@ -33,6 +33,7 @@ public class UpdateUsers {
     }
     
     
-    public static void newPassengerMade(Passenger passenger){
+    public void newPassengerMade(Passenger passenger){
+        view.addCbSelectUser(String.valueOf(passenger.getId()));
     }
 }
