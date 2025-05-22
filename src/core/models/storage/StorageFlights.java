@@ -1,6 +1,5 @@
 package core.models.storage;
 
-
 import core.models.Flight;
 import core.models.Location;
 import core.models.Plane;
@@ -11,42 +10,41 @@ import java.util.List;
 import java.util.Map;
 
 public class StorageFlights implements Storage<Flight> {
+
     private static StorageFlights instance;
     private Map<String, Flight> flightsMap;
 
     private StorageFlights() {
         this.flightsMap = new HashMap<>();
     }
+
     public static StorageFlights getInstance() {
         if (instance == null) {
             instance = new StorageFlights();
         }
         return instance;
     }
-  @Override
 
-      public boolean loadFromJson(String path) {return true;}
-//        List<Plane> planes = new ArrayList<>(StoragePlanes.getInstance().getAll().values());
-//        List<Location> locations = new ArrayList<>(StorageLocations.getInstance().getAll().values());
-//
-//        ReadJSonFlight reader = new ReadJSonFlight(planes, locations);
-//        List<Flight> flightsList = reader.readFromFile(path);
-//
-//        if (flightsList == null || flightsList.isEmpty()) {
-//            return false;
-//        }
-//
-//        for (Flight flight : flightsList) {
-//            this.flights.put(flight.getId(), flight);
-//        }
-//
-//        return true;
-//        
-//
-//        return !flights.isEmpty();
-//    }
+    @Override
+    public boolean loadFromJson(String path) {
+        Map<String, Plane> planes = StoragePlanes.getInstance().getAll();
+        Map<String, Location> locations = StorageLocations.getInstance().getAll();
 
-    
+        ReadJSonFlight reader = new ReadJSonFlight(planes, locations);
+
+        List<Flight> flightsList = reader.readFromFile(path);
+
+        if (flightsList == null || flightsList.isEmpty()) {
+            return false;
+        }
+
+        for (Flight flight : flightsList) {
+            this.flightsMap.put(flight.getId(), flight);
+        }
+
+        return true;
+    }
+
     public Map<String, Flight> getAll() {
         return this.flightsMap;
     }
@@ -60,24 +58,35 @@ public class StorageFlights implements Storage<Flight> {
     }
 
     @Override
-    public Flight get(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean add(Flight flight) {
+        if (flight == null || flightsMap.containsKey(flight.getId())) {
+            return false;
+        }
+        flightsMap.put(flight.getId(), flight);
+        return true;
     }
 
     @Override
-    public boolean add(Flight flight) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Flight get(String id) {
+        return flightsMap.get(id);
     }
 
     @Override
     public boolean delete(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (!flightsMap.containsKey(id)) {
+            return false;
+        }
+        flightsMap.remove(id);
+        return true;
     }
 
     @Override
     public boolean update(Flight flight) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (flight == null || !flightsMap.containsKey(flight.getId())) {
+            return false;
+        }
+        flightsMap.put(flight.getId(), flight);
+        return true;
     }
+
 }
-
-
