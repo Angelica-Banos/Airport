@@ -12,7 +12,27 @@ import core.views.AirportFrame;
  * @author Angie
  */
 public class UpdateUsers {
+    private final AirportFrame view;
+    private static UpdateUsers instance;
+    
+    private UpdateUsers(AirportFrame airportFrame) {
+        this.view = airportFrame;
+    }
+    
+    public UpdateUsers getUpdateUsers(AirportFrame airportFrame){
+        if (instance == null) {
+            instance = new UpdateUsers(airportFrame);
+        } 
+        return instance;
+    }
+    public UpdateUsers getUpdateUsers(){
+        if (instance == null) {
+           return null;
+        } 
+        return instance;
+    }
+    
+    
     public static void newPassengerMade(Passenger passenger){
-        AirportFrame
     }
 }
