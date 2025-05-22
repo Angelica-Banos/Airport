@@ -14,6 +14,6 @@ public interface Storage<T> {
     boolean delete(String id);
     boolean update(T obj);
     public boolean loadFromJson(String filepath);
-    
+    public void notifyObserver(T obj);
     
 }

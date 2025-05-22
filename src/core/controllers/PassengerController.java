@@ -159,6 +159,7 @@ public class PassengerController {
         return storagePlassengers.add(passenger);
     }
 
+
     public static List<Object[]> getPassengerTableData() {
         StoragePassengers storage = StoragePassengers.getInstance();
         List<Object[]> tableData = new ArrayList<>();
@@ -178,5 +179,6 @@ public class PassengerController {
 
         return tableData;
     }
+
 
 }

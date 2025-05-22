@@ -5,6 +5,7 @@
 package core.views;
 
 import core.controllers.PassengerController;
+import core.controllers.PlaneController;
 import core.controllers.utils.Response;
 import core.models.Flight;
 import core.models.Location;
@@ -1548,12 +1549,27 @@ public class AirportFrame extends javax.swing.JFrame {
         String id = txtAirplaneId.getText();
         String brand = txtAirplaneBrand.getText();
         String model = txtAirplaneModel.getText();
-        int maxCapacity = Integer.parseInt(txtAirplaneCapacity.getText());
+        String maxCapacity = txtAirplaneCapacity.getText();
         String airline = txtAirplaneAirline.getText();
 
-        this.planes.add(new Plane(id, brand, model, maxCapacity, airline));
+        Response response = PlaneController.createPlane(id, brand, model, maxCapacity, airline);
 
-        this.cbFlightPlane.addItem(id);
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+
+            txtAirplaneId.setText("");
+            txtAirplaneBrand.setText("");
+            txtAirplaneModel.setText("");
+            txtAirplaneCapacity.setText("");
+            txtAirplaneAirline.setText("");
+    
+            this.cbFlightPlane.addItem(id);
+
+        }
     }//GEN-LAST:event_btnAirplaneCreateActionPerformed
 
     private void btnLocationCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocationCreateActionPerformed
@@ -1760,8 +1776,13 @@ public class AirportFrame extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jButton13ActionPerformed
 
+
+    
+    public void addCbSelectUser(String id){
+        this.cbSelectUser.addItem(id);
+    }
     private void cbSelectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSelectUserActionPerformed
-        try {
+       
             String id = cbSelectUser.getSelectedItem().toString();
             if (!id.equals(cbSelectUser.getItemAt(0))) {
                 txtUpdInfoId.setText(id);
@@ -1770,8 +1791,7 @@ public class AirportFrame extends javax.swing.JFrame {
                 txtUpdInfoId.setText("");
                 txtAddFlightId.setText("");
             }
-        } catch (Exception e) {
-        }
+        
     }//GEN-LAST:event_cbSelectUserActionPerformed
 
     private void cbPassangerMonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPassangerMonthActionPerformed

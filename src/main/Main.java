@@ -24,7 +24,9 @@ public class Main {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AirportFrame().setVisible(true);
+               AirportFrame airportFrame = new AirportFrame();
+               airportFrame.setVisible(true);
+               
             }
         });
     }
