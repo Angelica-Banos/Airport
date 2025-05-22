@@ -122,4 +122,9 @@ public class StoragePlanes implements Storage<Plane> {
         return false;
     }
 
+    @Override
+    public void notifyObserver(Plane obj) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

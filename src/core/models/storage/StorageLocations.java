@@ -119,4 +119,9 @@ public class StorageLocations implements Storage<Location> {
         return false;
     }
 
+    @Override
+    public void notifyObserver(Location obj) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

@@ -89,4 +89,13 @@ public class StorageFlights implements Storage<Flight> {
         return true;
     }
 
+    @Override
+    public void notifyObserver(Flight obj) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public boolean exists(String id) {
+        return flightsMap.containsKey(id);
+    }
+
 }

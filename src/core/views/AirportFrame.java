@@ -4,6 +4,7 @@
  */
 package core.views;
 
+import core.controllers.FlightController;
 import core.controllers.PassengerController;
 import core.controllers.PlaneController;
 import core.controllers.utils.Response;
@@ -61,8 +62,8 @@ public class AirportFrame extends javax.swing.JFrame {
         this.generateHours();
         this.generateMinutes();
         this.blockPanels();
-        
-        UpdateUsers = new updateUsers(this);
+
+        //UpdateUsers = new updateUsers(this);
     }
 
     private void cargarPassengers() {
@@ -1215,6 +1216,11 @@ public class AirportFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelShowAllFlights.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelShowAllFlightsMouseClicked(evt);
+            }
+        });
         paneShowAllFlights.setViewportView(tabelShowAllFlights);
 
         btnShowAllFlightsRefresh.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
@@ -1568,7 +1574,7 @@ public class AirportFrame extends javax.swing.JFrame {
             txtAirplaneModel.setText("");
             txtAirplaneCapacity.setText("");
             txtAirplaneAirline.setText("");
-    
+
             this.cbFlightPlane.addItem(id);
 
         }
@@ -1754,6 +1760,14 @@ public class AirportFrame extends javax.swing.JFrame {
         for (Flight flight : this.flights) {
             model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
         }
+        List<Object[]> datos = FlightController.getFlightTableData();
+        DefaultTableModel modelo = (DefaultTableModel) tabelShowAllFlights.getModel();
+        modelo.setRowCount(0); // Limpiar la tabla
+
+        for (Object[] fila : datos) {
+            modelo.addRow(fila);
+        }
+
     }//GEN-LAST:event_btnShowAllFlightsRefreshActionPerformed
 
     private void btnShowAllPlanesRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllPlanesRefreshActionPerformed
@@ -1778,22 +1792,20 @@ public class AirportFrame extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jButton13ActionPerformed
 
-
-    
-    public void addCbSelectUser(String id){
+    public void addCbSelectUser(String id) {
         this.cbSelectUser.addItem(id);
     }
     private void cbSelectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSelectUserActionPerformed
-       
-            String id = cbSelectUser.getSelectedItem().toString();
-            if (!id.equals(cbSelectUser.getItemAt(0))) {
-                txtUpdInfoId.setText(id);
-                txtAddFlightId.setText(id);
-            } else {
-                txtUpdInfoId.setText("");
-                txtAddFlightId.setText("");
-            }
-        
+
+        String id = cbSelectUser.getSelectedItem().toString();
+        if (!id.equals(cbSelectUser.getItemAt(0))) {
+            txtUpdInfoId.setText(id);
+            txtAddFlightId.setText(id);
+        } else {
+            txtUpdInfoId.setText("");
+            txtAddFlightId.setText("");
+        }
+
     }//GEN-LAST:event_cbSelectUserActionPerformed
 
     private void cbPassangerMonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPassangerMonthActionPerformed
@@ -1811,6 +1823,10 @@ public class AirportFrame extends javax.swing.JFrame {
     private void txtPassangerYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassangerYearActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPassangerYearActionPerformed
+
+    private void tabelShowAllFlightsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelShowAllFlightsMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabelShowAllFlightsMouseClicked
 
     /**
      * @param args the command line arguments

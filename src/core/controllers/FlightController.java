@@ -6,10 +6,12 @@ import core.models.*;
 import core.models.storage.StorageFlights;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlightController {
 
-    public  static Response createfligth(String id, Plane plane, Location departureLocation, Location scaleLocation,
+    public static Response createfligth(String id, Plane plane, Location departureLocation, Location scaleLocation,
             Location arrivalLocation, LocalDateTime departureDate,
             int hoursDurationArrival, int minutesDurationArrival,
             int hoursDurationScale, int minutesDurationScale) {
@@ -67,7 +69,6 @@ public class FlightController {
                 }
             }
 
-            
             Flight newFlight;
             if (scaleLocation != null) {
                 newFlight = new Flight(id, plane, departureLocation, scaleLocation, arrivalLocation,
@@ -82,6 +83,27 @@ public class FlightController {
             return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
         }
         return new Response("Fligth created successfully", Status.OK);
+    }
+
+    public static List<Object[]> getFlightTableData() {
+        StorageFlights storage = StorageFlights.getInstance();
+        List<Object[]> tableData = new ArrayList<>();
+
+        for (Flight flight : storage.getAllAsList()) {
+            Object[] row = {
+                flight.getId(),
+                flight.getPlane().getId(),
+                flight.getDepartureLocation().getAirportId(),
+                flight.getArrivalLocation().getAirportId(),
+                (flight.getScaleLocation() != null ? flight.getScaleLocation().getAirportId() : "N/A"),
+                flight.getDepartureDate().toString(),
+                flight.calculateArrivalDate().toString(),
+                flight.getNumPassengers()
+            };
+            tableData.add(row);
+        }
+
+        return tableData;
     }
 
 }
