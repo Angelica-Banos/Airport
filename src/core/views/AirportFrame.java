@@ -61,6 +61,8 @@ public class AirportFrame extends javax.swing.JFrame {
         this.generateHours();
         this.generateMinutes();
         this.blockPanels();
+        
+        UpdateUsers = new updateUsers(this);
     }
 
     private void cargarPassengers() {
