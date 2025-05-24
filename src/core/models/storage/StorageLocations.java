@@ -9,7 +9,9 @@ import core.models.observers.LocationObserver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,6 +29,10 @@ public class StorageLocations implements Storage<Location> {
         locations = new HashMap<>();
     }
 
+    public List<Location> getAllAsList() {
+        return new ArrayList<>(this.locations.values());
+    }
+
     public static StorageLocations getInstance() {
         if (instance == null) {
             instance = new StorageLocations();
@@ -40,7 +46,7 @@ public class StorageLocations implements Storage<Location> {
             Location lc = (Location) location;
             if (!locations.containsKey(lc.getAirportId())) {
                 locations.put(lc.getAirportId(), lc);
-                   this.notifyObserver(location);
+                this.notifyObserver(location);
                 return true;
             }
         }
@@ -101,7 +107,7 @@ public class StorageLocations implements Storage<Location> {
                     long airportLatitude = location.getLong("airportLatitude");
                     long airportLongitude = location.getLong("airportLatitude");
 
-                    Location obj = new Location(airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude );
+                    Location obj = new Location(airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude);
 
                     locations.put(airportId, obj);
                     this.notifyObserver(obj);

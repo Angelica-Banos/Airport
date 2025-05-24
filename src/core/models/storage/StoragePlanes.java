@@ -9,7 +9,9 @@ import core.models.observers.PlaneObserver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,6 +33,10 @@ public class StoragePlanes implements Storage<Plane> {
         return this.planes;
     }
 
+    public List<Plane> getAllAsList() {
+        return new ArrayList<>(this.planes.values());
+    }
+
     public static StoragePlanes getInstance() {
         if (instance == null) {
             instance = new StoragePlanes();
@@ -43,7 +49,7 @@ public class StoragePlanes implements Storage<Plane> {
         Plane p = (Plane) plane;
         if (!planes.containsKey(p.getId())) {
             planes.put(p.getId(), p);
-             this.notifyObserver(plane);
+            this.notifyObserver(plane);
             return true;
         }
         return false;
