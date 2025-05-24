@@ -4,6 +4,7 @@
  */
 package core.views;
 
+import core.controllers.AirportController;
 import core.controllers.FlightController;
 import core.controllers.PassengerController;
 import core.controllers.PlaneController;
@@ -1589,14 +1590,30 @@ public class AirportFrame extends javax.swing.JFrame {
         String name = txtLocationName.getText();
         String city = txtLocationCity.getText();
         String country = txtLocationCountry.getText();
-        double latitude = Double.parseDouble(txtLocationLatitude.getText());
-        double longitude = Double.parseDouble(txtLocationLongitude.getText());
-
-        this.locations.add(new Location(id, name, city, country, latitude, longitude));
-
-        this.cbFlightDepartureLocation.addItem(id);
-        this.cbFlightArrivalLocation.addItem(id);
-        this.cbFlightScaleLocation.addItem(id);
+         String latitude = txtLocationLatitude.getText();
+        String longitude = txtLocationLongitude.getText();
+        
+        Response response = AirportController.createAirport(id, name, city, country, latitude, longitude);
+        
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+            
+            txtLocationId.setText("");
+            txtLocationName.setText("");
+            txtLocationCity.setText("");
+            txtLocationCountry.setText("");
+            txtLocationLatitude.setText("");
+            txtLocationLongitude.setText("");
+            
+            this.cbFlightDepartureLocation.addItem(id);
+            this.cbFlightArrivalLocation.addItem(id);
+            this.cbFlightScaleLocation.addItem(id);
+            
+        }
     }//GEN-LAST:event_btnLocationCreateActionPerformed
 
     private void btnFlightCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlightCreateActionPerformed
