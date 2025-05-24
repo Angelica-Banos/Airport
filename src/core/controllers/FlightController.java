@@ -55,7 +55,7 @@ public class FlightController {
         try {
             StorageFlights storage = StorageFlights.getInstance();
 
-            if (storage.exists(id)) {
+            if (storage.get(id) != null) {
                 return new Response("Flight ID already exists", Status.BAD_REQUEST);
             }
 

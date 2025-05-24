@@ -8,6 +8,7 @@ import core.controllers.AirportController;
 import core.controllers.FlightController;
 import core.controllers.PassengerController;
 import core.controllers.PlaneController;
+import core.controllers.tables.FlightTable;
 import core.controllers.update.UpdateFlights;
 import core.controllers.update.UpdateLocations;
 import core.controllers.update.UpdatePlanes;
@@ -23,7 +24,6 @@ import core.models.storage.StoragePassengers;
 import core.models.storage.StoragePlanes;
 import java.awt.Color;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -58,7 +58,6 @@ public class AirportFrame extends javax.swing.JFrame {
         cargarLocations();
         cargarPlanes();
         cargarFlight();
-        
 
         this.passengers = new ArrayList<>();
         this.planes = new ArrayList<>();
@@ -1808,12 +1807,7 @@ public class AirportFrame extends javax.swing.JFrame {
             }
         }
 
-        ArrayList<Flight> flights = passenger.getFlights();
-        DefaultTableModel model = (DefaultTableModel) tableShowsMyFlights.getModel();
-        model.setRowCount(0);
-        for (Flight flight : flights) {
-            model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), flight.calculateArrivalDate()});
-        }
+
     }//GEN-LAST:event_btnShowsMyFlightsRefreshActionPerformed
 
     private void btnShowAllPassengersRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllPassengersRefreshActionPerformed
@@ -1839,17 +1833,28 @@ public class AirportFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) tabelShowAllFlights.getModel();
         model.setRowCount(0);
+        Response response = FlightTable.getList();
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            ArrayList<Flight> flights = (ArrayList<Flight>) response.getObject();
+            model.setRowCount(0);
+            for (Flight flight : flights) {
+                model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
+            }
+            List<Object[]> datos = FlightController.getFlightTableData();
+            DefaultTableModel modelo = (DefaultTableModel) tabelShowAllFlights.getModel();
+            modelo.setRowCount(0); // Limpiar la tabla
 
-        for (Flight flight : this.flights) {
-            model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
-        }
-        List<Object[]> datos = FlightController.getFlightTableData();
-        DefaultTableModel modelo = (DefaultTableModel) tabelShowAllFlights.getModel();
-        modelo.setRowCount(0); // Limpiar la tabla
+            for (Object[] fila : datos) {
+                modelo.addRow(fila);
+            }
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
 
-        for (Object[] fila : datos) {
-            modelo.addRow(fila);
         }
+
 
     }//GEN-LAST:event_btnShowAllFlightsRefreshActionPerformed
 
