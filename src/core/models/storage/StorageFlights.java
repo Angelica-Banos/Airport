@@ -27,6 +27,10 @@ public class StorageFlights implements Storage<Flight> {
         return instance;
     }
 
+    public boolean exists(String id) {
+        return flightsMap.containsKey(id);
+    }
+
     @Override
     public boolean loadFromJson(String path) {
         Map<String, Plane> planes = StoragePlanes.getInstance().getAll();
@@ -97,11 +101,9 @@ public class StorageFlights implements Storage<Flight> {
         new FlightObserver().update(flight);
     }
 
-
-
     public List<Flight> getFlightsSortedById() {
         List<Flight> sortedFlights = new ArrayList<>();
-        for(Flight fl : flightsMap.values()){
+        for (Flight fl : flightsMap.values()) {
             sortedFlights.add(fl.clone());
         }
         sortedFlights.sort(Comparator.comparing(Flight::getId));

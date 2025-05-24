@@ -14,7 +14,11 @@ import java.util.List;
 
 public class FlightController {
 
-    public static Response createfligth(String id, String planeId, String departureLocationId, String arrivalLocationId, String scaleLocationIdRaw, String yearStr, String monthStr, String dayStr, String hourStr, String minutesStr, String hoursDurationsArrivalStr, String minutesDurationsArrivalStr, String hoursDurationsScaleStr, String minutesDurationsScaleStr) {
+    public static Response createfligth(String id, String planeId, String departureLocationId, String arrivalLocationId,
+            String scaleLocationIdRaw, String yearStr, String monthStr, String dayStr,
+            String hourStr, String minutesStr, String hoursDurationsArrivalStr,
+            String minutesDurationsArrivalStr, String hoursDurationsScaleStr,
+            String minutesDurationsScaleStr) {
 
         // --- 1. Validar y convertir todos los Strings a sus tipos correctos ---
         // ID de vuelo
@@ -41,55 +45,16 @@ public class FlightController {
         int minutesDurationsScale = 0; // Inicializar a 0 para vuelos sin escala
 
         try {
-
             hoursDurationsArrival = Integer.parseInt(hoursDurationsArrivalStr.trim());
             minutesDurationsArrival = Integer.parseInt(minutesDurationsArrivalStr.trim());
         } catch (NumberFormatException e) {
             return new Response("Invalid number format for arrival duration. Please enter valid numbers.", Status.BAD_REQUEST);
-
-            StorageFlights storage = StorageFlights.getInstance();
-
-            if (storage.get(id) != null) {
-                return new Response("Flight ID already exists", Status.BAD_REQUEST);
-            }
-
-            LocalDateTime newStart = departureDate;
-
-            long totalHours = hoursDurationArrival + hoursDurationScale;
-            long totalMinutes = minutesDurationArrival + minutesDurationScale;
-
-            LocalDateTime newEnd = departureDate.plusHours(totalHours).plusMinutes(totalMinutes);
-
-            for (Flight existingFlight : plane.getFlights()) {
-                LocalDateTime existingStart = existingFlight.getDepartureDate();
-                LocalDateTime existingEnd = existingFlight.calculateArrivalDate();
-
-                //If fligths are conflicted
-                boolean overlap = newStart.isBefore(existingEnd) && existingStart.isBefore(newEnd);
-                if (overlap) {
-                    return new Response("This plane has a schedule conflict with another flight", Status.BAD_REQUEST);
-                }
-            }
-
-            Flight newFlight;
-            if (scaleLocation != null) {
-                newFlight = new Flight(id, plane, departureLocation, scaleLocation, arrivalLocation,
-                        departureDate, hoursDurationArrival, minutesDurationArrival,
-                        hoursDurationScale, minutesDurationScale);
-            } else {
-                newFlight = new Flight(id, plane, departureLocation, scaleLocation, arrivalLocation, departureDate, hoursDurationArrival, minutesDurationArrival, hoursDurationScale, minutesDurationScale);
-
-            }
-
-        } catch (Exception e) {
-            return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
-
         }
 
         // Determinar si hay escala y parsear duraciones de escala
         // Considera si " " o "-" o "N/A_ID" son tus marcadores de "sin escala"
-        boolean hasScale = (scaleLocationIdRaw != null && !scaleLocationIdRaw.trim().isEmpty() &&
-                           !scaleLocationIdRaw.trim().equals("-") && !scaleLocationIdRaw.trim().equals("N/A_ID"));
+        boolean hasScale = (scaleLocationIdRaw != null && !scaleLocationIdRaw.trim().isEmpty()
+                && !scaleLocationIdRaw.trim().equals("-") && !scaleLocationIdRaw.trim().equals("N/A_ID"));
         String scaleLocationId = scaleLocationIdRaw.trim(); // Limpiar para búsqueda
 
         if (hasScale) {
@@ -103,9 +68,8 @@ public class FlightController {
 
         // --- 2. Obtener instancias de Storage para buscar objetos ---
         StorageFlights storageFlights = StorageFlights.getInstance();
-        List<Plane> allPlanes = StoragePlanes.getInstance().getAllAsList(); 
-        List<Location> allLocations = StorageLocations.getInstance().getAllAsList(); 
-
+        List<Plane> allPlanes = StoragePlanes.getInstance().getAllAsList(); // Asume este método en StoragePlanes
+        List<Location> allLocations = StorageLocations.getInstance().getAllAsList(); // Asume este método en StorageLocations
 
         // --- 3. Buscar objetos Plane y Location ---
         Plane plane = null;
@@ -147,7 +111,6 @@ public class FlightController {
         }
 
         // --- 5. Validar reglas de negocio ---
-
         // Validar fecha de salida
         LocalDateTime departureDate;
         try {
@@ -208,9 +171,8 @@ public class FlightController {
         return new Response("Flight created successfully", Status.OK);
     }
 
-    
     public static List<Object[]> getFlightTableData() {
-        StorageFlights storage = StorageFlights.getInstance(); 
+        StorageFlights storage = StorageFlights.getInstance();
         List<Object[]> tableData = new ArrayList<>();
 
         for (Flight flight : storage.getAllAsList()) {
