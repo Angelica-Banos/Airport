@@ -8,6 +8,7 @@ import core.models.storage.StorageLocations;
 import core.models.storage.StoragePlanes;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList; // Asegúrate de importar ArrayList
 import java.util.List;
@@ -201,4 +202,81 @@ public class FlightController {
         return tableData;
     }
 
+    public static Response delayFlight(String flightId, String hoursToDelayStr, String minutesToDelayStr) {
+       
+        if (flightId == null || flightId.trim().isEmpty()) {
+            return new Response("Flight ID must not be empty.", Status.BAD_REQUEST);
+        }
+        flightId = flightId.trim();
+
+        int hoursToDelay;
+        int minutesToDelay;
+        try {
+            hoursToDelay = Integer.parseInt(hoursToDelayStr.trim());
+            minutesToDelay = Integer.parseInt(minutesToDelayStr.trim());
+        } catch (NumberFormatException e) {
+            return new Response("Invalid number format for hours or minutes to delay. Please enter valid numbers.", Status.BAD_REQUEST);
+        }
+
+        if (hoursToDelay < 0 || minutesToDelay < 0) {
+            return new Response("Delay duration must be positive.", Status.BAD_REQUEST);
+        }
+
+        
+        if (hoursToDelay == 0 && minutesToDelay == 0) {
+            return new Response("No delay specified (0 hours and 0 minutes).", Status.BAD_REQUEST);
+        }
+        
+       
+        StorageFlights storageFlights = StorageFlights.getInstance();
+        Flight flightToDelay = storageFlights.get(flightId);
+
+        if (flightToDelay == null) {
+            return new Response("Flight with ID " + flightId + " not found.", Status.NOT_FOUND);
+        }
+
+        
+        LocalDateTime currentDepartureDate = flightToDelay.getDepartureDate();
+        LocalDateTime newDepartureDate = currentDepartureDate.plusHours(hoursToDelay).plusMinutes(minutesToDelay);
+
+        
+        if (newDepartureDate.isBefore(currentDepartureDate)) {
+             
+             return new Response("The new departure date cannot be before the current departure date.", Status.BAD_REQUEST);
+        }
+        
+        
+        
+        Plane plane = flightToDelay.getPlane();
+        LocalDateTime newStart = newDepartureDate;
+
+        long totalHours = flightToDelay.getHoursDurationArrival() + flightToDelay.getHoursDurationScale();
+        long totalMinutes = flightToDelay.getMinutesDurationArrival() + flightToDelay.getMinutesDurationScale();
+        LocalDateTime newEnd = newDepartureDate.plusHours(totalHours).plusMinutes(totalMinutes);
+
+        // Iterar sobre TODOS los vuelos del avión, *excepto el que estamos atrasando*.
+        for (Flight existingFlight : plane.getFlights()) {
+            if (!existingFlight.getId().equals(flightToDelay.getId())) { // Excluir el vuelo actual
+                LocalDateTime existingStart = existingFlight.getDepartureDate();
+                LocalDateTime existingEnd = existingFlight.calculateArrivalDate();
+
+                boolean overlap = newStart.isBefore(existingEnd) && existingStart.isBefore(newEnd);
+                if (overlap) {
+                    return new Response("Delaying this flight causes a schedule conflict with another flight (ID: " + existingFlight.getId() + ") for the plane " + plane.getId(), Status.BAD_REQUEST);
+                }
+            }
+        }
+
+       
+        flightToDelay.setDepartureDate(newDepartureDate);
+        
+        
+        if (!storageFlights.update(flightToDelay)) {
+            return new Response("Failed to update flight in storage.", Status.INTERNAL_SERVER_ERROR);
+        }
+        
+
+        return new Response("Flight " + flightId + " successfully delayed to " +
+                            newDepartureDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + ".", Status.OK);
+    }
 }

@@ -1598,7 +1598,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_btnAirplaneCreateActionPerformed
-    
+
 
     private void btnLocationCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocationCreateActionPerformed
         // TODO add your handling code here:
@@ -1648,9 +1648,9 @@ public class AirportFrame extends javax.swing.JFrame {
         String minutesDurationsArrival = cbFlightArrivalDurationMinute.getItemAt(cbFlightArrivalDurationMinute.getSelectedIndex());
         String hoursDurationsScale = cbFlightScaleDurationHour.getItemAt(cbFlightScaleDurationHour.getSelectedIndex());
         String minutesDurationsScale = cbFlightScaleDurationMinute.getItemAt(cbFlightScaleDurationMinute.getSelectedIndex());
-        
-        Response response = FlightController.createfligth(id,planeId,departureLocationId,arrivalLocationId,scaleLocationId,year,month,
-                day,hour,minutes,hoursDurationsArrival,minutesDurationsArrival,hoursDurationsScale,minutesDurationsScale);
+
+        Response response = FlightController.createfligth(id, planeId, departureLocationId, arrivalLocationId, scaleLocationId, year, month,
+                day, hour, minutes, hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale);
         // Mostrar resultado
         if (response.getStatus() >= 500) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
@@ -1664,13 +1664,12 @@ public class AirportFrame extends javax.swing.JFrame {
             txtPassangerFirstName.setText("");
             txtPassangerLastName.setText("");
             txtPassangerYear.setText("");
-            cbPassangerMonth.setSelectedIndex(-1);
-            cbPassangerDay.setSelectedIndex(-1);
+            cbPassangerMonth.setSelectedIndex(0);
+            cbPassangerDay.setSelectedIndex(0);
             txtPassangerCountryCode.setText("");
             txtPassangerPhoneNumber.setText("");
             txtPassangerCountry.setText("");
 
-           
             // Agregar el id al combo
             this.cbAddFlightFlight.addItem(id);
 
@@ -1738,17 +1737,24 @@ public class AirportFrame extends javax.swing.JFrame {
     private void btnDelayFlightDelayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelayFlightDelayActionPerformed
         // TODO add your handling code here:
         String flightId = cbDelayFlightId.getItemAt(cbDelayFlightId.getSelectedIndex());
-        int hours = Integer.parseInt(cbDelayFlightHour.getItemAt(cbDelayFlightHour.getSelectedIndex()));
-        int minutes = Integer.parseInt(cbDelayFlightMinute.getItemAt(cbDelayFlightMinute.getSelectedIndex()));
+        String hours = cbDelayFlightHour.getItemAt(cbDelayFlightHour.getSelectedIndex());
+        String minutes = cbDelayFlightMinute.getItemAt(cbDelayFlightMinute.getSelectedIndex());
 
-        Flight flight = null;
-        for (Flight f : this.flights) {
-            if (flightId.equals(f.getId())) {
-                flight = f;
-            }
+        Response response = FlightController.delayFlight(flightId, hours, minutes);
+
+       
+        if (response.getStatus()<=200) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito al Atrasar Vuelo", JOptionPane.INFORMATION_MESSAGE);
+
+            cbDelayFlightId.setSelectedIndex(0);
+            cbDelayFlightHour.setSelectedIndex(0);
+            cbDelayFlightMinute.setSelectedIndex(0);
+
+        } else if (response.getStatus() >= 400 && response.getStatus() < 500) { // Errores del cliente (BAD_REQUEST, NOT_FOUND, CONFLICT)
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error al Atrasar Vuelo", JOptionPane.WARNING_MESSAGE);
+        } else { // Errores del servidor o inesperados
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error Interno", JOptionPane.ERROR_MESSAGE);
         }
-
-        flight.delay(hours, minutes);
     }//GEN-LAST:event_btnDelayFlightDelayActionPerformed
 
     private void btnShowsMyFlightsRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowsMyFlightsRefreshActionPerformed
