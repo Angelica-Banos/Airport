@@ -62,11 +62,12 @@ public class FlightController {
 
         // Determinar si hay escala y parsear duraciones de escala
         // Considera si " " o "-" o "N/A_ID" son tus marcadores de "sin escala"
-        boolean hasScale = (scaleLocationIdRaw != null && !scaleLocationIdRaw.trim().isEmpty()
-                && !scaleLocationIdRaw.trim().equals("-") && !scaleLocationIdRaw.trim().equals("N/A_ID"));
+        boolean hasScale = (scaleLocationIdRaw != null && !scaleLocationIdRaw.trim().isEmpty() &&
+                           !scaleLocationIdRaw.trim().equals("-") && !scaleLocationIdRaw.trim().equals("N/A_ID") &&
+                           !scaleLocationIdRaw.trim().equals("Location")); // <-- ¡Aquí está el cambio clave!
         String scaleLocationId = scaleLocationIdRaw.trim(); // Limpiar para búsqueda
 
-        if (hasScale) {
+        if (hasScale) { // Solo intenta parsear si realmente hay una escala válida
             try {
                 hoursDurationsScale = Integer.parseInt(hoursDurationsScaleStr.trim());
                 minutesDurationsScale = Integer.parseInt(minutesDurationsScaleStr.trim());
@@ -74,8 +75,7 @@ public class FlightController {
                 return new Response("Invalid number format for scale duration. Please enter valid numbers.", Status.BAD_REQUEST);
             }
         }
-
-       
+        
         StorageFlights storageFlights = StorageFlights.getInstance();
         List<Plane> allPlanes = StoragePlanes.getInstance().getAllAsList(); // Asume este método en StoragePlanes
         List<Location> allLocations = StorageLocations.getInstance().getAllAsList(); // Asume este método en StorageLocations
