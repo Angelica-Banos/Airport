@@ -3,6 +3,7 @@ package core.models.storage;
 import core.models.Flight;
 import core.models.Location;
 import core.models.Plane;
+import core.models.observers.FlightObserver;
 import core.models.persistency.ReadJSonFlight;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +41,7 @@ public class StorageFlights implements Storage<Flight> {
 
         for (Flight flight : flightsList) {
             this.flightsMap.put(flight.getId(), flight);
+            this.notifyObserver(flight);
         }
 
         return true;
@@ -63,6 +65,7 @@ public class StorageFlights implements Storage<Flight> {
             return false;
         }
         flightsMap.put(flight.getId(), flight);
+         this.notifyObserver(flight);
         return true;
     }
 
@@ -90,8 +93,8 @@ public class StorageFlights implements Storage<Flight> {
     }
 
     @Override
-    public void notifyObserver(Flight obj) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void notifyObserver(Flight flight) {
+      new FlightObserver().update(flight);
     }
 
     public boolean exists(String id) {
