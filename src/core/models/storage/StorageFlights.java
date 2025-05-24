@@ -44,7 +44,6 @@ public class StorageFlights implements Storage<Flight> {
             this.flightsMap.put(flight.getId(), flight);
             this.notifyObserver(flight);
         }
-
         return true;
     }
 
@@ -98,12 +97,13 @@ public class StorageFlights implements Storage<Flight> {
         new FlightObserver().update(flight);
     }
 
-    public boolean exists(String id) {
-        return flightsMap.containsKey(id);
-    }
+
 
     public List<Flight> getFlightsSortedById() {
-        List<Flight> sortedFlights = new ArrayList<>(flightsMap.values());
+        List<Flight> sortedFlights = new ArrayList<>();
+        for(Flight fl : flightsMap.values()){
+            sortedFlights.add(fl.clone());
+        }
         sortedFlights.sort(Comparator.comparing(Flight::getId));
         return sortedFlights;
     }

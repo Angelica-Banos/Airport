@@ -41,10 +41,49 @@ public class FlightController {
         int minutesDurationsScale = 0; // Inicializar a 0 para vuelos sin escala
 
         try {
+
             hoursDurationsArrival = Integer.parseInt(hoursDurationsArrivalStr.trim());
             minutesDurationsArrival = Integer.parseInt(minutesDurationsArrivalStr.trim());
         } catch (NumberFormatException e) {
             return new Response("Invalid number format for arrival duration. Please enter valid numbers.", Status.BAD_REQUEST);
+
+            StorageFlights storage = StorageFlights.getInstance();
+
+            if (storage.get(id) != null) {
+                return new Response("Flight ID already exists", Status.BAD_REQUEST);
+            }
+
+            LocalDateTime newStart = departureDate;
+
+            long totalHours = hoursDurationArrival + hoursDurationScale;
+            long totalMinutes = minutesDurationArrival + minutesDurationScale;
+
+            LocalDateTime newEnd = departureDate.plusHours(totalHours).plusMinutes(totalMinutes);
+
+            for (Flight existingFlight : plane.getFlights()) {
+                LocalDateTime existingStart = existingFlight.getDepartureDate();
+                LocalDateTime existingEnd = existingFlight.calculateArrivalDate();
+
+                //If fligths are conflicted
+                boolean overlap = newStart.isBefore(existingEnd) && existingStart.isBefore(newEnd);
+                if (overlap) {
+                    return new Response("This plane has a schedule conflict with another flight", Status.BAD_REQUEST);
+                }
+            }
+
+            Flight newFlight;
+            if (scaleLocation != null) {
+                newFlight = new Flight(id, plane, departureLocation, scaleLocation, arrivalLocation,
+                        departureDate, hoursDurationArrival, minutesDurationArrival,
+                        hoursDurationScale, minutesDurationScale);
+            } else {
+                newFlight = new Flight(id, plane, departureLocation, scaleLocation, arrivalLocation, departureDate, hoursDurationArrival, minutesDurationArrival, hoursDurationScale, minutesDurationScale);
+
+            }
+
+        } catch (Exception e) {
+            return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
+
         }
 
         // Determinar si hay escala y parsear duraciones de escala
