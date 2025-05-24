@@ -23,6 +23,7 @@ import core.models.storage.StoragePassengers;
 import core.models.storage.StoragePlanes;
 import java.awt.Color;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -57,6 +58,7 @@ public class AirportFrame extends javax.swing.JFrame {
         cargarLocations();
         cargarPlanes();
         cargarFlight();
+        
 
         this.passengers = new ArrayList<>();
         this.planes = new ArrayList<>();
@@ -1587,6 +1589,26 @@ public class AirportFrame extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_btnAirplaneCreateActionPerformed
+    private void refreshTable() {
+        FlightController controller = new FlightController(StorageFlights.getInstance());
+        List<Flight> sortedFlights = controller.getSortedFlightsForTable();
+
+        DefaultTableModel model = (DefaultTableModel) tabelShowAllFlights.getModel();
+        model.setRowCount(0); // Limpiar la tabla
+
+        for (Flight flight : sortedFlights) {
+            Object[] row = {
+                flight.getId(),
+                flight.getDepartureLocation().getAirportId(),
+                flight.getArrivalLocation().getAirportId(),
+                (flight.getScaleLocation() != null ? flight.getScaleLocation().getAirportId() : "N/A"),
+                flight.getDepartureDate().toString(),
+                flight.calculateArrivalDate().toString(),
+                flight.getPlane().getId()
+            };
+            model.addRow(row);
+        }
+    }
 
     private void btnLocationCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocationCreateActionPerformed
         // TODO add your handling code here:
@@ -1637,12 +1659,15 @@ public class AirportFrame extends javax.swing.JFrame {
         int hoursDurationsScale = Integer.parseInt(cbFlightScaleDurationHour.getItemAt(cbFlightScaleDurationHour.getSelectedIndex()));
         int minutesDurationsScale = Integer.parseInt(cbFlightScaleDurationMinute.getItemAt(cbFlightScaleDurationMinute.getSelectedIndex()));
 
+        // Crear la fecha de salida
         LocalDateTime departureDate = LocalDateTime.of(year, month, day, hour, minutes);
 
+        // BUSCAR los objetos Plane y Location antes de llamar al controller
         Plane plane = null;
         for (Plane p : this.planes) {
             if (planeId.equals(p.getId())) {
                 plane = p;
+                break;
             }
         }
 
@@ -1661,13 +1686,41 @@ public class AirportFrame extends javax.swing.JFrame {
             }
         }
 
-        if (scale == null) {
-            this.flights.add(new Flight(id, plane, departure, arrival, departureDate, hoursDurationsArrival, minutesDurationsArrival));
-        } else {
-            this.flights.add(new Flight(id, plane, departure, scale, arrival, departureDate, hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale));
-        }
+        Response response = FlightController.createfligth(
+                id, plane, departure, scale, arrival, departureDate,
+                hoursDurationsArrival, minutesDurationsArrival,
+                hoursDurationsScale, minutesDurationsScale
+        );
 
-        this.cbAddFlightFlight.addItem(id);
+        // Mostrar resultado
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+
+            // Limpiar campos
+            txtPassangerId.setText("");
+            txtPassangerFirstName.setText("");
+            txtPassangerLastName.setText("");
+            txtPassangerYear.setText("");
+            cbPassangerMonth.setSelectedIndex(-1);
+            cbPassangerDay.setSelectedIndex(-1);
+            txtPassangerCountryCode.setText("");
+            txtPassangerPhoneNumber.setText("");
+            txtPassangerCountry.setText("");
+
+            // Agregar el vuelo a la lista local
+            if (scale == null) {
+                this.flights.add(new Flight(id, plane, departure, arrival, departureDate, hoursDurationsArrival, minutesDurationsArrival));
+            } else {
+                this.flights.add(new Flight(id, plane, departure, scale, arrival, departureDate, hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale));
+            }
+
+            // Agregar el id al combo
+            this.cbAddFlightFlight.addItem(id);
+        }
     }//GEN-LAST:event_btnFlightCreateActionPerformed
 
     private void btnUpdInfoUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdInfoUpdateActionPerformed
@@ -1786,6 +1839,7 @@ public class AirportFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) tabelShowAllFlights.getModel();
         model.setRowCount(0);
+
         for (Flight flight : this.flights) {
             model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
         }
@@ -1857,7 +1911,7 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_cbPassangerMonthActionPerformed
 
     private void cbFlightPlaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFlightPlaneActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_cbFlightPlaneActionPerformed
 
     private void txtPassangerIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassangerIdActionPerformed

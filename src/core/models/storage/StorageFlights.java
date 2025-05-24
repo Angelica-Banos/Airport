@@ -6,6 +6,7 @@ import core.models.Plane;
 import core.models.observers.FlightObserver;
 import core.models.persistency.ReadJSonFlight;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class StorageFlights implements Storage<Flight> {
             return false;
         }
         flightsMap.put(flight.getId(), flight);
-         this.notifyObserver(flight);
+        this.notifyObserver(flight);
         return true;
     }
 
@@ -94,11 +95,17 @@ public class StorageFlights implements Storage<Flight> {
 
     @Override
     public void notifyObserver(Flight flight) {
-      new FlightObserver().update(flight);
+        new FlightObserver().update(flight);
     }
 
     public boolean exists(String id) {
         return flightsMap.containsKey(id);
+    }
+
+    public List<Flight> getFlightsSortedById() {
+        List<Flight> sortedFlights = new ArrayList<>(flightsMap.values());
+        sortedFlights.sort(Comparator.comparing(Flight::getId));
+        return sortedFlights;
     }
 
 }
