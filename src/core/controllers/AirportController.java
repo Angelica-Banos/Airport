@@ -71,12 +71,12 @@ public class AirportController {
             }
 
             //Check latitude and longitude decimals
-            String[] decimals = latitude.split(",", 2);
-            if (decimals[1].length() > 4) {
+            String[] decimals = latitude.trim().split(".", 2);
+            if (decimals[1].length() > 5) {
                 return new Response("Airport latitude must have 4 or less decimals", Status.BAD_REQUEST);
             }
-            decimals = longitude.split(",", 2);
-            if (decimals[1].length() > 4) {
+            decimals = longitude.split(".", 2);
+            if (decimals[1].length() > 5) {
                 return new Response("Airport longitude must have 4 or less decimals", Status.BAD_REQUEST);
             }
             //Add to storage
