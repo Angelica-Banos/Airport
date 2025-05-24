@@ -11,6 +11,14 @@ import java.util.List;
 
 public class FlightController {
 
+    private StorageFlights storageFlights;
+
+    public FlightController(StorageFlights storageFlights) {
+        this.storageFlights = storageFlights;
+    }
+    
+
+    
     public static Response createfligth(String id, Plane plane, Location departureLocation, Location scaleLocation,
             Location arrivalLocation, LocalDateTime departureDate,
             int hoursDurationArrival, int minutesDurationArrival,
@@ -85,8 +93,6 @@ public class FlightController {
         return new Response("Fligth created successfully", Status.OK);
     }
 
-    
-    
     public static List<Object[]> getFlightTableData() {
         StorageFlights storage = StorageFlights.getInstance();
         List<Object[]> tableData = new ArrayList<>();
@@ -108,6 +114,8 @@ public class FlightController {
         return tableData;
     }
 
-  
+    public List<Flight> getSortedFlightsForTable() {
+        return storageFlights.getFlightsSortedById();
+    }
 
 }
