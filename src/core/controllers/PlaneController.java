@@ -10,6 +10,9 @@ import core.models.Plane;
 import core.models.persistency.ReadJSonPlane;
 import core.models.storage.StoragePlanes;
 import core.models.verifing.Verifying;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -78,11 +81,10 @@ public class PlaneController {
         }
     }
 
+   
     public static boolean addPlane(Plane plane) {
         StoragePlanes planeStorage = StoragePlanes.getInstance();
         return planeStorage.add(plane);
     }
-    
-
 
 }

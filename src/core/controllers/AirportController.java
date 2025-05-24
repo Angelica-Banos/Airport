@@ -9,6 +9,9 @@ import core.controllers.utils.Status;
 import core.models.Location;
 import core.models.storage.StorageLocations;
 import core.models.verifing.Verifying;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -80,8 +83,8 @@ public class AirportController {
                 return new Response("Airport longitude must have 4 or less decimals", Status.BAD_REQUEST);
             }
             //Add to storage
-            if(!addLocation(new Location(id, name, city, country, dLatitude, dLongitude))){
-                 return new Response("There's already an airport with that Id", Status.BAD_REQUEST);
+            if (!addLocation(new Location(id, name, city, country, dLatitude, dLongitude))) {
+                return new Response("There's already an airport with that Id", Status.BAD_REQUEST);
             }
             // All Good :D
             return new Response("Airport created", Status.CREATED);
@@ -90,6 +93,7 @@ public class AirportController {
         }
 
     }
+    
 
     public static boolean addLocation(Location airport) {
         StorageLocations locationStorage = StorageLocations.getInstance();
