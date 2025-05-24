@@ -4,16 +4,12 @@
  */
 package core.models.storage;
 
-import core.models.Location;
-import core.models.Passenger;
 import core.models.Plane;
+import core.models.observers.PlaneObserver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -47,6 +43,7 @@ public class StoragePlanes implements Storage<Plane> {
         Plane p = (Plane) plane;
         if (!planes.containsKey(p.getId())) {
             planes.put(p.getId(), p);
+             this.notifyObserver(plane);
             return true;
         }
         return false;
@@ -109,6 +106,7 @@ public class StoragePlanes implements Storage<Plane> {
                     );
 
                     planes.put(id, plane);
+                    this.notifyObserver(plane);
                 }
 
                 return true;
@@ -123,8 +121,8 @@ public class StoragePlanes implements Storage<Plane> {
     }
 
     @Override
-    public void notifyObserver(Plane obj) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void notifyObserver(Plane plane) {
+        new PlaneObserver().update(plane);
     }
 
 }

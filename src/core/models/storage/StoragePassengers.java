@@ -118,8 +118,7 @@ public class StoragePassengers implements Storage<Passenger> {
 
     @Override
     public void notifyObserver(Passenger passenger) {
-        PassengerObserver passengerObserver = new PassengerObserver();
-        passengerObserver.update(passenger);
+        new PassengerObserver().update(passenger);
     }
 
 }

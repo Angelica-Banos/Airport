@@ -8,6 +8,7 @@ import core.controllers.AirportController;
 import core.controllers.FlightController;
 import core.controllers.PassengerController;
 import core.controllers.PlaneController;
+import core.controllers.update.UpdatePlanes;
 import core.controllers.update.UpdateUsers;
 import core.controllers.utils.Response;
 import core.models.Flight;
@@ -19,7 +20,6 @@ import core.models.storage.StorageLocations;
 import core.models.storage.StoragePassengers;
 import core.models.storage.StoragePlanes;
 import java.awt.Color;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +47,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     public AirportFrame() {
         UpdateUsers.getUpdateUsers(this);
+        UpdatePlanes.getUpdatePlanes(this);
 
         initComponents();
         cargarPassengers();
@@ -1819,6 +1820,9 @@ public class AirportFrame extends javax.swing.JFrame {
 
     public void addCbSelectUser(String id) {
         this.cbSelectUser.addItem(id);
+    }
+    public void addCbFlightPlane(String id) {
+        this.cbFlightPlane.addItem(id);
     }
     private void cbSelectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSelectUserActionPerformed
 
