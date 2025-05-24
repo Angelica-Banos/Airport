@@ -1668,31 +1668,36 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void btnUpdInfoUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdInfoUpdateActionPerformed
         // TODO add your handling code here:
-        long id = Long.parseLong(txtUpdInfoId.getText());
+        String id = (txtUpdInfoId.getText());
         String firstname = txtUpdInfoFirstName.getText();
         String lastname = txtUpdInfoLastName.getText();
-        int year = Integer.parseInt(txtUpdInfoYear.getText());
-        int month = Integer.parseInt(cbPassangerMonth.getItemAt(cbUpdInfoMonth.getSelectedIndex()));
-        int day = Integer.parseInt(cbPassangerDay.getItemAt(cbUpdInfoday.getSelectedIndex()));
-        int phoneCode = Integer.parseInt(txtUpdInfoCountryCode.getText());
-        long phone = Long.parseLong(txtUpdInfoPhone.getText());
+        String year = txtUpdInfoYear.getText();
+        String month = cbPassangerMonth.getItemAt(cbUpdInfoMonth.getSelectedIndex());
+        String day = cbPassangerDay.getItemAt(cbUpdInfoday.getSelectedIndex());
+        String phoneCode = (txtUpdInfoCountryCode.getText());
+        String phone = (txtUpdInfoPhone.getText());
         String country = txtUpdInfoCountry.getText();
 
-        LocalDate birthDate = LocalDate.of(year, month, day);
+        Response response = PassengerController.updatePassanger(id, firstname, lastname, year, month, day, phoneCode, phone, country);
 
-        Passenger passenger = null;
-        for (Passenger p : this.passengers) {
-            if (p.getId() == id) {
-                passenger = p;
-            }
+                if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+            
+            txtUpdInfoId.setText("");
+            txtUpdInfoFirstName.setText("");
+            txtUpdInfoLastName.setText("");
+            cbPassangerMonth.setSelectedIndex(-1);
+            cbPassangerDay.setSelectedIndex(-1);
+            txtUpdInfoCountryCode.setText("");
+            txtUpdInfoPhone.setText("");
+            txtUpdInfoCountry.setText("");
+            
         }
 
-        passenger.setFirstname(firstname);
-        passenger.setLastname(lastname);
-        passenger.setBirthDate(birthDate);
-        passenger.setCountryPhoneCode(phoneCode);
-        passenger.setPhone(phone);
-        passenger.setCountry(country);
     }//GEN-LAST:event_btnUpdInfoUpdateActionPerformed
 
     private void btnAddFlightAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlightAddActionPerformed

@@ -85,6 +85,8 @@ public class FlightController {
         return new Response("Fligth created successfully", Status.OK);
     }
 
+    
+    
     public static List<Object[]> getFlightTableData() {
         StorageFlights storage = StorageFlights.getInstance();
         List<Object[]> tableData = new ArrayList<>();

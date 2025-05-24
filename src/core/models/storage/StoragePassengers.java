@@ -75,7 +75,7 @@ public class StoragePassengers implements Storage<Passenger> {
     @Override
     public Passenger get(String id) {
         try {
-            return passengers.get(Long.parseLong(id));
+            return passengers.get(Long.valueOf(id));
         } catch (NumberFormatException e) {
             return null;
         }
@@ -83,18 +83,18 @@ public class StoragePassengers implements Storage<Passenger> {
 
     @Override
     public boolean add(Passenger passenger) {
-            if (!passengers.containsKey(passenger.getId())) {
-                passengers.put(passenger.getId(), passenger);
-                this.notifyObserver(passenger);
-                return true;
-            }
+        if (!passengers.containsKey(passenger.getId())) {
+            passengers.put(passenger.getId(), passenger);
+            this.notifyObserver(passenger);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean delete(String id) {
         try {
-            return passengers.remove(Long.parseLong(id)) != null;
+            return passengers.remove(Long.valueOf(id)) != null;
         } catch (NumberFormatException e) {
             return false;
         }
@@ -102,26 +102,24 @@ public class StoragePassengers implements Storage<Passenger> {
 
     @Override
     public boolean update(Passenger obj) {
-        if (obj instanceof Passenger) {
-            Passenger p = (Passenger) obj;
-            if (passengers.containsKey(p.getId())) {
-                passengers.put(p.getId(), p);
-                return true;
-            }
+        try {
+            passengers.put(obj.getId(), obj);
+            return true;
+
+        } catch (Exception e) {
+            return false;
+
         }
-        return false;
     }
 
     public Collection<Passenger> getAll() {
-    return passengers.values();
-}
-
-
+        return passengers.values();
+    }
 
     @Override
     public void notifyObserver(Passenger passenger) {
-      PassengerObserver passengerObserver = new PassengerObserver();
-      passengerObserver.update(passenger);
+        PassengerObserver passengerObserver = new PassengerObserver();
+        passengerObserver.update(passenger);
     }
 
 }
