@@ -31,9 +31,7 @@ public class Verifying {
     }
     
     public static boolean checkAirportId(String id){
-        if(!(Character.isUpperCase(id.charAt(0)) && Character.isUpperCase(id.charAt(1)) && Character.isUpperCase(2))){
-            return false; //All letters aren't in uppercase
-        }
-        return true;
+        return Character.isUpperCase(id.charAt(0)) && Character.isUpperCase(id.charAt(1)) && Character.isUpperCase(id.charAt(2));
+        //True if all characters are upperCase
     }
 }

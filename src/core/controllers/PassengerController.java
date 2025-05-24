@@ -31,7 +31,7 @@ public class PassengerController {
             //Verify that Id is a whole number (int)
             int intId;
             try {
-                intId = Integer.parseInt(id);
+                intId = Integer.parseInt(id.trim());
             } catch (NumberFormatException e) {
                 return new Response("Id must be a whole number", Status.BAD_REQUEST);
             }
