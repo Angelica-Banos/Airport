@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList; // Asegúrate de importar ArrayList
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class FlightController {
 
@@ -20,12 +21,20 @@ public class FlightController {
             String minutesDurationsArrivalStr, String hoursDurationsScaleStr,
             String minutesDurationsScaleStr) {
 
-        // --- 1. Validar y convertir todos los Strings a sus tipos correctos ---
-        // ID de vuelo
+        
         if (id == null || id.trim().isEmpty()) {
-            return new Response("Flight ID must not be empty", Status.BAD_REQUEST);
-        }
-        id = id.trim(); // Limpiar el ID
+        return new Response("Flight ID must not be empty", Status.BAD_REQUEST);
+    }
+    id = id.trim(); // Limpiar el ID
+    // Patrón de expresión regular para XXXYYY
+    // ^      -> Inicio de la cadena
+    // [A-Z]{3} -> Tres letras mayúsculas (A-Z)
+    // [0-9]{3} -> Tres dígitos (0-9)
+    // $      -> Fin de la cadena
+    Pattern idPattern = Pattern.compile("^[A-Z]{3}[0-9]{3}$");
+    if (!idPattern.matcher(id).matches()) {
+        return new Response("Flight ID must follow the format 'XXXYYY' (e.g., 'ABC123'), where X are uppercase letters and Y are digits.", Status.BAD_REQUEST);
+    }
 
         // Fechas y horas
         int year, month, day, hour, minutes;
@@ -66,12 +75,12 @@ public class FlightController {
             }
         }
 
-        // --- 2. Obtener instancias de Storage para buscar objetos ---
+       
         StorageFlights storageFlights = StorageFlights.getInstance();
         List<Plane> allPlanes = StoragePlanes.getInstance().getAllAsList(); // Asume este método en StoragePlanes
         List<Location> allLocations = StorageLocations.getInstance().getAllAsList(); // Asume este método en StorageLocations
 
-        // --- 3. Buscar objetos Plane y Location ---
+        
         Plane plane = null;
         for (Plane p : allPlanes) { // Usar la lista obtenida estáticamente
             if (planeId.equals(p.getId())) {
@@ -96,7 +105,7 @@ public class FlightController {
             }
         }
 
-        // --- 4. Validar objetos encontrados ---
+        
         if (plane == null) {
             return new Response("Plane with ID " + planeId + " not found.", Status.BAD_REQUEST);
         }
@@ -110,7 +119,7 @@ public class FlightController {
             return new Response("Scale location with ID " + scaleLocationId + " not found.", Status.BAD_REQUEST);
         }
 
-        // --- 5. Validar reglas de negocio ---
+       
         // Validar fecha de salida
         LocalDateTime departureDate;
         try {
@@ -165,7 +174,7 @@ public class FlightController {
                     hoursDurationsScale, minutesDurationsScale);
         }
 
-        // IMPORTANTE: Agregar el vuelo al almacenamiento
+     
         storageFlights.add(newFlight); // Agrega el vuelo a la instancia del StorageFlights
 
         return new Response("Flight created successfully", Status.OK);
