@@ -5,14 +5,11 @@
 package core.models.storage;
 
 import core.models.Location;
-import core.models.Passenger;
+import core.models.observers.LocationObserver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,6 +40,7 @@ public class StorageLocations implements Storage<Location> {
             Location lc = (Location) location;
             if (!locations.containsKey(lc.getAirportId())) {
                 locations.put(lc.getAirportId(), lc);
+                   this.notifyObserver(location);
                 return true;
             }
         }
@@ -106,6 +104,7 @@ public class StorageLocations implements Storage<Location> {
                     Location obj = new Location(airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude );
 
                     locations.put(airportId, obj);
+                    this.notifyObserver(obj);
                 }
 
                 return true;
@@ -120,8 +119,8 @@ public class StorageLocations implements Storage<Location> {
     }
 
     @Override
-    public void notifyObserver(Location obj) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void notifyObserver(Location location) {
+        new LocationObserver().update(location);
     }
 
 }
