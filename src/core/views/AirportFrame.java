@@ -1897,6 +1897,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     public void updatePassengerTable(Passenger ps) {
         DefaultTableModel model = (DefaultTableModel) tableShowAllPassengers.getModel();
+        model.setRowCount(model.getRowCount());
         model.addRow(new Object[]{ps.getId(), ps.getFullname(), ps.getBirthDate(), ps.calculateAge(), ps.generateFullPhone(), ps.getCountry(), ps.getNumFlights()});
     }
 

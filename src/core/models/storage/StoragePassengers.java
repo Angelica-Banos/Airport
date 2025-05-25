@@ -77,7 +77,7 @@ public class StoragePassengers implements Storage<Passenger> {
                     );
 
                     passengers.put(id, passenger);
-                    this.notifyObserver(passenger);
+                    this.notifyObserver(passengers.get(id));
                 }
 
                 return true;
