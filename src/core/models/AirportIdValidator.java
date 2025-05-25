@@ -12,6 +12,11 @@ public class AirportIdValidator implements Validator<String> {
 
     @Override
     public boolean isValid(String id) {
-        return LocationValidator.isValidAirportId(id);
+        return id != null && id.length() == 3
+                && Character.isUpperCase(id.charAt(0))
+                && Character.isUpperCase(id.charAt(1))
+                && Character.isUpperCase(id.charAt(2));
     }
+
 }
+
