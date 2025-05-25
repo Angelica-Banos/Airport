@@ -15,7 +15,7 @@ import core.controllers.tables.PlaneTable;
 import core.controllers.update.UpdateFlights;
 import core.controllers.update.UpdateLocations;
 import core.controllers.update.UpdatePlanes;
-import core.controllers.update.UpdateUsers;
+import core.controllers.update.UpdatePassenger;
 import core.controllers.utils.Response;
 import core.models.Flight;
 import core.models.Location;
@@ -47,7 +47,7 @@ public class AirportFrame extends javax.swing.JFrame {
     private ArrayList<Passenger> passengers;
 
     public AirportFrame() {
-        UpdateUsers.getUpdateUsers(this);
+        UpdatePassenger.getUpdatePassenger(this);
         UpdatePlanes.getUpdatePlanes(this);
         UpdateFlights.getUpdateFlights(this);
         UpdateLocations.getUpdateLocations(this);
@@ -1775,7 +1775,6 @@ public class AirportFrame extends javax.swing.JFrame {
     private void btnShowAllPassengersRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllPassengersRefreshActionPerformed
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) tableShowAllPassengers.getModel();
-        model.setRowCount(0);
         Response response = PassengerTable.getList();
         if (response.getStatus() >= 500) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
