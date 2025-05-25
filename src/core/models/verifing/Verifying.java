@@ -10,28 +10,15 @@ package core.models.verifing;
  */
 public class Verifying {
 
-    public Verifying() {
+    private static final IdVerifier planeVerifier = new PlaneIdVerifier();
+    private static final IdVerifier airportVerifier = new AirportIdVerifier();
+
+    public static int verifyPlaneId(String id) {
+        return planeVerifier.verify(id);
     }
-    
-    public static  int verifyPlaneId(String id){
-        String letters = id.substring(0, 2);
-        String numbers = id.substring(id.length()-5);
-        
-        if(!(Character.isUpperCase(letters.charAt(0)) && Character.isUpperCase(letters.charAt(1)))){
-            return 2; //Both letters aren't in uppercase
-        }
-        
-        try {
-            int number = Integer.parseInt(numbers);
-        } catch (NumberFormatException e) {
-            return 1; //Doesn't end in 5 numbers
-        }
-        
-        return 0; //Nice
+
+    public static boolean checkAirportId(String id) {
+        return airportVerifier.verify(id) == 0;
     }
-    
-    public static boolean checkAirportId(String id){
-        return Character.isUpperCase(id.charAt(0)) && Character.isUpperCase(id.charAt(1)) && Character.isUpperCase(id.charAt(2));
-        //True if all characters are upperCase
-    }
+
 }

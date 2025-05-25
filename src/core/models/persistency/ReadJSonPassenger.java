@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReadJSONPassenger implements Reader<Passenger> {
+public class ReadJSonPassenger implements Reader<Passenger> {
 
     @Override
     public List<Passenger> readFromFile(String relativePath) {
