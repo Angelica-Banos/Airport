@@ -191,6 +191,8 @@ public class PassengerController {
                 return new Response("First name must not be empty", Status.BAD_REQUEST);
             }
 
+            
+
             if (lastname.trim().equals("")) {
                 return new Response("Last name must not be empty", Status.BAD_REQUEST);
             }
@@ -208,6 +210,7 @@ public class PassengerController {
             // Validar  que el año, mes y días sean números
             int intYear, intMonth, intDay;
             try {
+                
                 intYear = Integer.parseInt(year);
             } catch (NumberFormatException ex) {
                 return new Response("The birth year must be a number", Status.BAD_REQUEST);
@@ -301,27 +304,6 @@ public class PassengerController {
     public static boolean updatePassenger(Passenger passenger) {
         return StoragePassengers.getInstance().update(passenger);
     }
-//
-//    public static List<Object[]> getPassengerTableData() {
-//        StoragePassengers storage = StoragePassengers.getInstance();
-//        List<Object[]> tableData = new ArrayList<>();
-//
-//        for (Passenger p : storage.getAll()) {
-//            Object[] row = {
-//                p.getId(),
-//                p.getFullname(),
-//                p.getBirthDate(),
-//                p.calculateAge(),
-//                p.generateFullPhone(),
-//                p.getCountry(),
-//                p.getNumFlights()
-//            };
-//            tableData.add(row);
-//        }
-//
-//        return tableData;
-//    }
-
     public static List<Object[]> getFlightsForPassenger(String passengerId) {
         List<Object[]> flightsData = new ArrayList<>();
 
@@ -367,7 +349,7 @@ public class PassengerController {
 
     public static Response getPassengerFlights(String id) {
         try {
-             //Verify that the id isn't empty
+            //Verify that the id isn't empty
             if (id.trim().isEmpty()) {
                 return new Response("Id can't be empty", Status.BAD_REQUEST);
             }
@@ -381,14 +363,14 @@ public class PassengerController {
             }
             //Verify that tehre is someone whith that id
             Passenger passenger = StoragePassengers.getInstance().get(id);
-            if(passenger== null){
-                 return new Response("Invalid id.", Status.BAD_REQUEST);
+            if (passenger == null) {
+                return new Response("Invalid id.", Status.BAD_REQUEST);
             }
-            List<Flight>fflight = new ArrayList<>();
-            for(Flight fl : passenger.getFlights()){
+            List<Flight> fflight = new ArrayList<>();
+            for (Flight fl : passenger.getFlights()) {
                 fflight.add(fl.clone());
             }
-            return new Response ("Flights for the passenger loaded correctly.", Status.OK, fflight);
+            return new Response("Flights for the passenger loaded correctly.", Status.OK, fflight);
         } catch (Exception e) {
             return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
         }

@@ -1790,11 +1790,9 @@ public class AirportFrame extends javax.swing.JFrame {
         } else if (response.getStatus() >= 400) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
         } else {
-
             List<Passenger> passengers = (List<Passenger>) response.getObject();
             model.setRowCount(0);
             for (Passenger ps : passengers) {
-
                 model.addRow(new Object[]{ps.getId(), ps.getFullname(), ps.getBirthDate(), ps.calculateAge(), ps.generateFullPhone(), ps.getCountry(), ps.getNumFlights()});
             }
             JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
