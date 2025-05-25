@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 //import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 //import org.netbeans.lib.AbsoluteLayout;
@@ -46,6 +47,8 @@ public class AirportFrame extends javax.swing.JFrame {
     private ArrayList<Plane> planes;
     private ArrayList<Location> locations;
     private ArrayList<Flight> flights;
+    
+
 
     public AirportFrame() {
         UpdateUsers.getUpdateUsers(this);
@@ -1560,8 +1563,8 @@ public class AirportFrame extends javax.swing.JFrame {
             txtPassangerFirstName.setText("");
             txtPassangerLastName.setText("");
             txtPassangerYear.setText("");
-            cbPassangerMonth.setSelectedIndex(-1);
-            cbPassangerDay.setSelectedIndex(-1);
+            cbPassangerMonth.setSelectedIndex(0);
+            cbPassangerDay.setSelectedIndex(0);
             txtPassangerCountryCode.setText("");
             txtPassangerPhoneNumber.setText("");
             txtPassangerCountry.setText("");
@@ -1700,8 +1703,8 @@ public class AirportFrame extends javax.swing.JFrame {
             txtUpdInfoId.setText("");
             txtUpdInfoFirstName.setText("");
             txtUpdInfoLastName.setText("");
-            cbPassangerMonth.setSelectedIndex(-1);
-            cbPassangerDay.setSelectedIndex(-1);
+            cbPassangerMonth.setSelectedIndex(0);
+            cbPassangerDay.setSelectedIndex(0);
             txtUpdInfoCountryCode.setText("");
             txtUpdInfoPhone.setText("");
             txtUpdInfoCountry.setText("");
@@ -1711,29 +1714,30 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdInfoUpdateActionPerformed
 
     private void btnAddFlightAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlightAddActionPerformed
-        // TODO add your handling code here:
-        long passengerId = Long.parseLong(txtAddFlightId.getText());
+
+        String passengerId = txtAddFlightId.getText();
         String flightId = cbAddFlightFlight.getItemAt(cbAddFlightFlight.getSelectedIndex());
 
-        Passenger passenger = null;
-        Flight flight = null;
+        Response response = FlightController.addPassengerToFlight(flightId, passengerId);
 
-        for (Passenger p : this.passengers) {
-            if (p.getId() == passengerId) {
-                passenger = p;
-            }
+        // La vista solo se encarga de mostrar el resultado del controlador
+        if (response.getStatus() <=200) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            refreshFlightsForPassengerTable(passengerId);
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        for (Flight f : this.flights) {
-            if (flightId.equals(f.getId())) {
-                flight = f;
-            }
-        }
-
-        passenger.addFlight(flight);
-        flight.addPassenger(passenger);
     }//GEN-LAST:event_btnAddFlightAddActionPerformed
+    public void refreshFlightsForPassengerTable(String passengerId) {
+        DefaultTableModel model = (DefaultTableModel) tableShowsMyFlights.getModel();
+        model.setRowCount(0);
+   
+        List<Object[]> flightsData = PassengerController.getFlightsForPassenger(passengerId);
 
+        for (Object[] row : flightsData) {
+            model.addRow(row);
+        }
+    }
     private void btnDelayFlightDelayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelayFlightDelayActionPerformed
         // TODO add your handling code here:
         String flightId = cbDelayFlightId.getItemAt(cbDelayFlightId.getSelectedIndex());
@@ -1742,8 +1746,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
         Response response = FlightController.delayFlight(flightId, hours, minutes);
 
-       
-        if (response.getStatus()<=200) {
+        if (response.getStatus() <= 200) {
             JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito al Atrasar Vuelo", JOptionPane.INFORMATION_MESSAGE);
 
             cbDelayFlightId.setSelectedIndex(0);

@@ -6,10 +6,12 @@ package core.controllers;
 
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
+import core.models.Flight;
 import core.models.Passenger;
 import core.models.storage.StorageFlights;
 import core.models.storage.StoragePassengers;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -318,6 +320,53 @@ public class PassengerController {
         }
 
         return tableData;
+    }
+    public static List<Object[]> getFlightsForPassenger(String passengerId) {
+        List<Object[]> flightsData = new ArrayList<>();
+        
+        
+        if (passengerId == null || passengerId.trim().isEmpty()) {
+            System.err.println("Error (PassengerController.getFlightsForPassenger): Passenger ID cannot be empty.");
+            return flightsData; 
+        }
+
+      
+        StoragePassengers storagePassengers = StoragePassengers.getInstance();
+        if (!storagePassengers.exists(passengerId)) {
+            System.err.println("Advertencia (PassengerController.getFlightsForPassenger): Passenger with ID " + passengerId + " not found in storage.");
+            return flightsData; 
+        }
+
+       
+        StorageFlights storageFlights = StorageFlights.getInstance();
+        List<Flight> allFlights = storageFlights.getAllAsList(); // Asumo que StorageFlights tiene este método
+
+       
+        for (Flight flight : allFlights) {
+            
+            
+            if (flight.getPassengers() != null) { 
+                for (Passenger pInFlight : flight.getPassengers()) {
+                    if (String.valueOf(pInFlight.getId()).equals(passengerId)) { // Comparar el ID del pasajero
+                        
+                        Object[] row = {
+                            flight.getId(),
+                            flight.getPlane().getId(),
+                            flight.getDepartureLocation().getAirportId(),
+                            flight.getArrivalLocation().getAirportId(),
+                            (flight.getScaleLocation() != null ? flight.getScaleLocation().getAirportId() : "N/A"),
+                            flight.getDepartureDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                            flight.calculateArrivalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                            // Puedes añadir más campos del vuelo aquí si son relevantes para la tabla
+                        };
+                        flightsData.add(row);
+                        break; // El pasajero ya fue encontrado en este vuelo, pasar al siguiente vuelo
+                    }
+                }
+            }
+        }
+
+        return flightsData;
     }
 
 }
