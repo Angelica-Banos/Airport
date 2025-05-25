@@ -46,7 +46,6 @@ public class AirportFrame extends javax.swing.JFrame {
     private int x, y;
     private ArrayList<Passenger> passengers;
 
-
     public AirportFrame() {
         UpdateUsers.getUpdateUsers(this);
         UpdatePlanes.getUpdatePlanes(this);
@@ -60,7 +59,6 @@ public class AirportFrame extends javax.swing.JFrame {
         cargarFlight();
 
         this.passengers = new ArrayList<>();
-
 
         this.setBackground(new Color(0, 0, 0, 0));
         this.setLocationRelativeTo(null);
@@ -93,16 +91,6 @@ public class AirportFrame extends javax.swing.JFrame {
         }
     }
 
-    private void cargarFlight() {
-        boolean cargado = StorageFlights.getInstance().loadFromJson("src/json/flights.json");
-
-        if (cargado) {
-            System.out.println("Flights cargados correctamente");
-        } else {
-            System.out.println("No se pudieron cargar Flights");
-        }
-    }
-
     private void cargarPlanes() {
         boolean cargado = StoragePlanes.getInstance().loadFromJson("json/planes.json");
 
@@ -110,6 +98,16 @@ public class AirportFrame extends javax.swing.JFrame {
             System.out.println("Planes cargados correctamente");
         } else {
             System.out.println("No se pudieron cargar Planes");
+        }
+    }
+
+    private void cargarFlight() {
+        boolean cargado = StorageFlights.getInstance().loadFromJson("src/json/flights.json");
+
+        if (cargado) {
+            System.out.println("Flights cargados correctamente");
+        } else {
+            System.out.println("No se pudieron cargar Flights");
         }
     }
 
@@ -1070,7 +1068,7 @@ public class AirportFrame extends javax.swing.JFrame {
                 .addGroup(jPanelAddToFlightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelAddFlightFlight)
                     .addComponent(cbAddFlightFlight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 288, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 289, Short.MAX_VALUE)
                 .addComponent(btnAddFlightAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(85, 85, 85))
         );
@@ -1796,31 +1794,45 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnShowAllPassengersRefreshActionPerformed
 
     private void btnShowAllFlightsRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllFlightsRefreshActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) tabelShowAllFlights.getModel();
-        model.setRowCount(0);
-        Response response = FlightTable.getList();
-        if (response.getStatus() >= 500) {
-            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
-        } else if (response.getStatus() >= 400) {
-            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
-        } else {
-            ArrayList<Flight> flights = (ArrayList<Flight>) response.getObject();
-            model.setRowCount(0);
-            for (Flight flight : flights) {
-                if (flight.getScaleLocation() == null) {
-                    model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), "Null", flight.getDepartureDate().toString(), flight.calculateArrivalDate().toString(), flight.getPlane().getId(), flight.getNumPassengers()});
+        
+    DefaultTableModel model = (DefaultTableModel) tabelShowAllFlights.getModel();
 
-                } else {
-                    model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation().getAirportId()), flight.getDepartureDate().toString(), flight.calculateArrivalDate().toString(), flight.getPlane().getId(), flight.getNumPassengers()});
+    // Limpiar la tabla de datos existentes.
+    // Esta línea ya existe y es correcta. Se puede eliminar la redundancia más abajo.
+    model.setRowCount(0);
 
-                }
-            }
+    
+    Response response = FlightTable.getList(); 
 
-            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+    
+    if (response.getStatus() >= 500) { 
+        JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+    } else if (response.getStatus() >= 400) { 
+        JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+    } else { 
+        ArrayList<Flight> flights = (ArrayList<Flight>) response.getObject();
 
+   
+        for (Flight flight : flights) {
+            
+            String scaleLocationId = (flight.getScaleLocation() == null) ? "N/A" : flight.getScaleLocation().getAirportId();
+
+            
+            model.addRow(new Object[]{
+                flight.getId(),
+                flight.getDepartureLocation().getAirportId(),
+                flight.getArrivalLocation().getAirportId(),
+                scaleLocationId, 
+                flight.getDepartureDate().toString(),
+                flight.calculateArrivalDate().toString(),
+                flight.getPlane().getId(),
+                flight.getNumPassengers() 
+            });
         }
 
+        
+        JOptionPane.showMessageDialog(null, response.getMessage(), "Mensaje de Respuesta", JOptionPane.INFORMATION_MESSAGE);
+    }
 
     }//GEN-LAST:event_btnShowAllFlightsRefreshActionPerformed
 

@@ -1644,7 +1644,7 @@
                               <Component id="labelAddFlightFlight" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="cbAddFlightFlight" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="288" max="32767" attributes="0"/>
+                          <EmptySpace pref="289" max="32767" attributes="0"/>
                           <Component id="btnAddFlightAdd" min="-2" pref="40" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
                       </Group>

@@ -25,8 +25,15 @@ public class StoragePassengers implements Storage<Passenger> {
         passengers = new HashMap<>();
     }
 
+   
     public boolean exists(String id) {
-        return passengers.containsKey(id);
+        try {
+            
+            return passengers.containsKey(Long.valueOf(id));
+        } catch (NumberFormatException e) {
+            
+            return false;
+        }
     }
 
     public static StoragePassengers getInstance() {
@@ -34,6 +41,11 @@ public class StoragePassengers implements Storage<Passenger> {
             instance = new StoragePassengers();
         }
         return instance;
+    }
+
+   
+    public Map<Long, Passenger> getAllAsMap() {
+        return this.passengers;
     }
 
     @Override
@@ -90,6 +102,7 @@ public class StoragePassengers implements Storage<Passenger> {
 
     @Override
     public boolean add(Passenger passenger) {
+        
         if (!passengers.containsKey(passenger.getId())) {
             passengers.put(passenger.getId(), passenger);
             this.notifyObserver(passenger);
@@ -127,9 +140,10 @@ public class StoragePassengers implements Storage<Passenger> {
     public void notifyObserver(Passenger passenger) {
         new PassengerObserver().update(passenger);
     }
+
     @Override
     public List<Passenger> getList(){
-                List<Passenger> listPassengers = new ArrayList<>();
+        List<Passenger> listPassengers = new ArrayList<>();
         for (Passenger ps : passengers.values()) {
             listPassengers.add(ps.clone());
         }
