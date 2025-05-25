@@ -1770,7 +1770,7 @@ public class AirportFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
         } else {
             List<Flight> flights = (List<Flight>) response.getObject();
-            model.setRowCount(0);
+            
             for (Flight fl : flights) {
                 model.addRow(new Object[]{fl.getId(), fl.getDepartureDate(), fl.calculateArrivalDate()});
             }
