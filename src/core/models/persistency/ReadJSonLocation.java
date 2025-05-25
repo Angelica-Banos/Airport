@@ -1,7 +1,6 @@
 package core.models.persistency;
 
 import core.models.Location;
-import core.models.Passenger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,12 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReadJSonLocation implements ReadJSon<Location>  {
+public class ReadJSonLocation implements Reader<Location> {
 
+    @Override
     public List<Location> readFromFile(String relativePath) {
         List<Location> locations = new ArrayList<>();
 
@@ -22,8 +21,7 @@ public class ReadJSonLocation implements ReadJSon<Location>  {
             File file = new File(relativePath);
             if (!file.exists()) {
                 System.err.println("Archivo no encontrado: " + relativePath);
-                 if (locations instanceof Location) {
-                return locations;}
+                return locations;
             }
 
             String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
@@ -31,19 +29,7 @@ public class ReadJSonLocation implements ReadJSon<Location>  {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-
-                 String airportId = obj.getString("airportId");
-                    String airportName = obj.getString("airportName");
-                    String airportCity = obj.getString("airportCity");
-                    String airportCountry = obj.getString("airportCountry");
-                    long airportLatitude = obj.getLong("airportLatitude");
-                    long airportLongitude = obj.getLong("airportLatitude");
-
-                    Location location = new Location(
-                            airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude
-                    );
-
-
+                Location location = parseLocation(obj);
                 locations.add(location);
             }
 
@@ -56,6 +42,14 @@ public class ReadJSonLocation implements ReadJSon<Location>  {
         return locations;
     }
 
-   
+    private Location parseLocation(JSONObject obj) {
+        String id = obj.getString("airportId");
+        String name = obj.getString("airportName");
+        String city = obj.getString("airportCity");
+        String country = obj.getString("airportCountry");
+        long lat = obj.getLong("airportLatitude");
+        long lon = obj.getLong("airportLongitude");
 
+        return new Location(id, name, city, country, lat, lon);
+    }
 }

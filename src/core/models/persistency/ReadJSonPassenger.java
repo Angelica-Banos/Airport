@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReadJSONPassenger implements ReadJSon<Passenger> {
+public class ReadJSONPassenger implements Reader<Passenger> {
 
     @Override
     public List<Passenger> readFromFile(String relativePath) {
@@ -31,18 +31,7 @@ public class ReadJSONPassenger implements ReadJSon<Passenger> {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
 
-                long id = obj.getLong("id");
-                String firstname = obj.getString("firstname");
-                String lastname = obj.getString("lastname");
-                LocalDate birthDate = LocalDate.parse(obj.getString("birthDate"));
-                int countryPhoneCode = obj.getInt("countryPhoneCode");
-                long phone = obj.getLong("phone");
-                String country = obj.getString("country");
-
-                Passenger passenger = new Passenger(
-                        id, firstname, lastname, birthDate, countryPhoneCode, phone, country
-                );
-
+                Passenger passenger = parsePassenger(obj);
                 passengers.add(passenger);
             }
 
@@ -54,4 +43,18 @@ public class ReadJSONPassenger implements ReadJSon<Passenger> {
 
         return passengers;
     }
+
+    private Passenger parsePassenger(JSONObject obj) {
+        long id = obj.getLong("id");
+        String firstname = obj.getString("firstname");
+        String lastname = obj.getString("lastname");
+        LocalDate birthDate = LocalDate.parse(obj.getString("birthDate"));
+        int countryPhoneCode = obj.getInt("countryPhoneCode");
+        long phone = obj.getLong("phone");
+        String country = obj.getString("country");
+
+        return new Passenger(id, firstname, lastname, birthDate, countryPhoneCode, phone, country);
+    }
 }
+
+
