@@ -1,5 +1,6 @@
 package core.models.storage;
 
+import core.controllers.update.UpdateUsers;
 import core.models.Passenger;
 import core.models.observers.PassengerObserver;
 import org.json.JSONArray;
@@ -11,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,7 +138,7 @@ public class StoragePassengers implements Storage<Passenger> {
 
     @Override
     public void notifyObserver(Passenger passenger) {
-        new PassengerObserver().update(passenger);
+        new PassengerObserver(UpdateUsers.getUpdateUsers()).update(passenger);
     }
 
     @Override

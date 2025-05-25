@@ -4,7 +4,7 @@
  */
 package core.models.observers;
 
-import core.controllers.update.UpdateFlights;
+import core.controllers.update.Update;
 import core.models.Flight;
 
 /**
@@ -12,8 +12,15 @@ import core.models.Flight;
  * @author Angie
  */
 public class FlightObserver implements Observer<Flight> {
+   Update  flightHandler;
+   
+    public FlightObserver(Update flightHandler) {
+        this.flightHandler = flightHandler;
+    }
+    
+    
      @Override
     public void update(Flight flight) {
-        UpdateFlights.getUpdateFlights().newFlightMade(flight);
+        flightHandler.newObject(flight);
     }
 }

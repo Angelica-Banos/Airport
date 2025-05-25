@@ -4,6 +4,7 @@
  */
 package core.models.storage;
 
+import core.controllers.update.UpdateLocations;
 import core.models.Location;
 import core.models.observers.LocationObserver;
 import java.io.IOException;
@@ -126,7 +127,7 @@ public class StorageLocations implements Storage<Location> {
 
     @Override
     public void notifyObserver(Location location) {
-        new LocationObserver().update(location);
+        new LocationObserver(UpdateLocations.getUpdateLocations()).update(location);
     }
 
     @Override

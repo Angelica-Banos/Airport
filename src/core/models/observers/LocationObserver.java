@@ -4,6 +4,7 @@
  */
 package core.models.observers;
 
+import core.controllers.update.Update;
 import core.controllers.update.UpdateLocations;
 import core.models.Location;
 
@@ -12,10 +13,14 @@ import core.models.Location;
  * @author Angie
  */
 public class LocationObserver implements Observer<Location> {
-
+   Update  locHandler;
+   
+    public LocationObserver(Update locHandler) {
+        this.locHandler = locHandler;
+    }
     @Override
     public void update(Location location) {
-        UpdateLocations.getUpdateLocations().newLocationMade(location);
+        locHandler.newObject(location);
     }
     
 }

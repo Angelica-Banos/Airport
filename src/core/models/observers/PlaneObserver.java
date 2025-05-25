@@ -4,7 +4,7 @@
  */
 package core.models.observers;
 
-import core.controllers.update.UpdatePlanes;
+import core.controllers.update.Update;
 import core.models.Plane;
 
 /**
@@ -12,8 +12,13 @@ import core.models.Plane;
  * @author Angie
  */
 public class PlaneObserver implements Observer<Plane>{
+      Update  planeHandler;
+   
+    public PlaneObserver(Update planeHandler) {
+        this.planeHandler = planeHandler;
+    }
         @Override
     public void update(Plane plane) {
-        UpdatePlanes.getUpdatePlanes().newPlaneMade(plane);
+        planeHandler.newObject(plane);
     }
 }
