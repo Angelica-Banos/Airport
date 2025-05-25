@@ -29,7 +29,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-//import javax.swing.UIManager;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 //import org.netbeans.lib.AbsoluteLayout;
 //import org.netbeans.lib.awtextra.AbsoluteConstraints;
@@ -1721,7 +1721,7 @@ public class AirportFrame extends javax.swing.JFrame {
         // La vista solo se encarga de mostrar el resultado del controlador
         if (response.getStatus() <= 200) {
             JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            refreshFlightsForPassengerTable(passengerId);
+             refreshFlightsForPassengerTable(passengerId);
         } else {
             JOptionPane.showMessageDialog(this, response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -1760,13 +1760,22 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void btnShowsMyFlightsRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowsMyFlightsRefreshActionPerformed
         // TODO add your handling code here:
-        long passengerId = Long.parseLong(cbSelectUser.getItemAt(cbSelectUser.getSelectedIndex()));
+        String passengerId = cbSelectUser.getItemAt(cbSelectUser.getSelectedIndex());
+        DefaultTableModel model = (DefaultTableModel) tableShowsMyFlights.getModel();
+        Response response = PassengerController.getPassengerFlights(passengerId);
 
-        Passenger passenger = null;
-        for (Passenger p : this.passengers) {
-            if (p.getId() == passengerId) {
-                passenger = p;
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            List<Flight> flights = (List<Flight>) response.getObject();
+            model.setRowCount(0);
+            for (Flight fl : flights) {
+                model.addRow(new Object[]{fl.getId(), fl.getDepartureDate(), fl.calculateArrivalDate()});
             }
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+
         }
 
 
@@ -1781,6 +1790,7 @@ public class AirportFrame extends javax.swing.JFrame {
         } else if (response.getStatus() >= 400) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
         } else {
+
             List<Passenger> passengers = (List<Passenger>) response.getObject();
             model.setRowCount(0);
             for (Passenger ps : passengers) {
@@ -1793,45 +1803,40 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnShowAllPassengersRefreshActionPerformed
 
     private void btnShowAllFlightsRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllFlightsRefreshActionPerformed
-        
-    DefaultTableModel model = (DefaultTableModel) tabelShowAllFlights.getModel();
 
-    // Limpiar la tabla de datos existentes.
-    // Esta línea ya existe y es correcta. Se puede eliminar la redundancia más abajo.
-    model.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) tabelShowAllFlights.getModel();
 
-    
-    Response response = FlightTable.getList(); 
+        // Limpiar la tabla de datos existentes.
+        // Esta línea ya existe y es correcta. Se puede eliminar la redundancia más abajo.
+        model.setRowCount(0);
 
-    
-    if (response.getStatus() >= 500) { 
-        JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
-    } else if (response.getStatus() >= 400) { 
-        JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
-    } else { 
-        ArrayList<Flight> flights = (ArrayList<Flight>) response.getObject();
+        Response response = FlightTable.getList();
 
-   
-        for (Flight flight : flights) {
-            
-            String scaleLocationId = (flight.getScaleLocation() == null) ? "N/A" : flight.getScaleLocation().getAirportId();
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            ArrayList<Flight> flights = (ArrayList<Flight>) response.getObject();
 
-            
-            model.addRow(new Object[]{
-                flight.getId(),
-                flight.getDepartureLocation().getAirportId(),
-                flight.getArrivalLocation().getAirportId(),
-                scaleLocationId, 
-                flight.getDepartureDate().toString(),
-                flight.calculateArrivalDate().toString(),
-                flight.getPlane().getId(),
-                flight.getNumPassengers() 
-            });
+            for (Flight flight : flights) {
+
+                String scaleLocationId = (flight.getScaleLocation() == null) ? "N/A" : flight.getScaleLocation().getAirportId();
+
+                model.addRow(new Object[]{
+                    flight.getId(),
+                    flight.getDepartureLocation().getAirportId(),
+                    flight.getArrivalLocation().getAirportId(),
+                    scaleLocationId,
+                    flight.getDepartureDate().toString(),
+                    flight.calculateArrivalDate().toString(),
+                    flight.getPlane().getId(),
+                    flight.getNumPassengers()
+                });
+            }
+
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Mensaje de Respuesta", JOptionPane.INFORMATION_MESSAGE);
         }
-
-        
-        JOptionPane.showMessageDialog(null, response.getMessage(), "Mensaje de Respuesta", JOptionPane.INFORMATION_MESSAGE);
-    }
 
     }//GEN-LAST:event_btnShowAllFlightsRefreshActionPerformed
 

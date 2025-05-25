@@ -54,29 +54,6 @@ public class Flight implements Clonable<Flight> {
         this.plane.addFlight(this);
     }
 
-    @Override
-    public Flight clone() {
-        String id = this.getId();
-        ArrayList<Passenger> passengers = this.getPassengers();
-        Location departureLocation = this.getDepartureLocation();
-        Location arrivalLocation = this.getArrivalLocation();
-        LocalDateTime departureDate = this.getDepartureDate();
-        int hoursDurationArrival = this.getHoursDurationArrival();
-        int minutesDurationArrival = this.getMinutesDurationArrival();
-        Flight flightClone;
-
-        if (this.scaleLocation == null) {
-            flightClone = new Flight(id, plane, departureLocation, arrivalLocation, departureDate, hoursDurationArrival, minutesDurationArrival);
-        } else {
-            Location scaleLocation = this.getScaleLocation();
-            int hoursDurationScale = this.getHoursDurationScale();
-            int minutesDurationScale = this.getMinutesDurationScale();
-            flightClone = new Flight(id, plane, departureLocation, scaleLocation, arrivalLocation, departureDate, hoursDurationArrival, minutesDurationArrival, hoursDurationScale, minutesDurationScale);
-        }
-        flightClone.setPassengers(passengers);
-        return flightClone;
-    }
-
     public void setPassengers(ArrayList<Passenger> passengers) {
         this.passengers = passengers;
     }
@@ -143,6 +120,31 @@ public class Flight implements Clonable<Flight> {
 
     public int getNumPassengers() {
         return passengers.size();
+    }
+
+    @Override
+    public Flight clone() {
+
+        String id = this.getId();
+        ArrayList<Passenger> passengers = this.getPassengers();
+        Location departureLocation = this.getDepartureLocation();
+        Location arrivalLocation = this.getArrivalLocation();
+        LocalDateTime departureDate = this.getDepartureDate();
+        int hoursDurationArrival = this.getHoursDurationArrival();
+        int minutesDurationArrival = this.getMinutesDurationArrival();
+        Flight flightClone;
+
+        if (this.scaleLocation == null) {
+            flightClone = new Flight(id, plane, departureLocation, arrivalLocation, departureDate, hoursDurationArrival, minutesDurationArrival);
+        } else {
+            Location scaleLocation = this.getScaleLocation();
+            int hoursDurationScale = this.getHoursDurationScale();
+            int minutesDurationScale = this.getMinutesDurationScale();
+            flightClone = new Flight(id, plane, departureLocation, scaleLocation, arrivalLocation, departureDate, hoursDurationArrival, minutesDurationArrival, hoursDurationScale, minutesDurationScale);
+        }
+        flightClone.setPassengers(passengers);
+        return flightClone;
+
     }
 
 }

@@ -321,34 +321,30 @@ public class PassengerController {
 //
 //        return tableData;
 //    }
+
     public static List<Object[]> getFlightsForPassenger(String passengerId) {
         List<Object[]> flightsData = new ArrayList<>();
-        
-        
+
         if (passengerId == null || passengerId.trim().isEmpty()) {
             System.err.println("Error (PassengerController.getFlightsForPassenger): Passenger ID cannot be empty.");
-            return flightsData; 
+            return flightsData;
         }
 
-      
         StoragePassengers storagePassengers = StoragePassengers.getInstance();
         if (!storagePassengers.exists(passengerId)) {
             System.err.println("Advertencia (PassengerController.getFlightsForPassenger): Passenger with ID " + passengerId + " not found in storage.");
-            return flightsData; 
+            return flightsData;
         }
 
-       
         StorageFlights storageFlights = StorageFlights.getInstance();
-        List<Flight> allFlights = storageFlights.getAllAsList(); 
+        List<Flight> allFlights = storageFlights.getAllAsList();
 
-       
         for (Flight flight : allFlights) {
-            
-            
-            if (flight.getPassengers() != null) { 
+
+            if (flight.getPassengers() != null) {
                 for (Passenger pInFlight : flight.getPassengers()) {
                     if (String.valueOf(pInFlight.getId()).equals(passengerId)) { // Comparar el ID del pasajero
-                        
+
                         Object[] row = {
                             flight.getId(),
                             flight.getPlane().getId(),
@@ -357,7 +353,7 @@ public class PassengerController {
                             (flight.getScaleLocation() != null ? flight.getScaleLocation().getAirportId() : "N/A"),
                             flight.getDepartureDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                             flight.calculateArrivalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                            // Puedes añadir más campos del vuelo aquí si son relevantes para la tabla
+                        // Puedes añadir más campos del vuelo aquí si son relevantes para la tabla
                         };
                         flightsData.add(row);
                         break; // El pasajero ya fue encontrado en este vuelo, pasar al siguiente vuelo
@@ -369,5 +365,33 @@ public class PassengerController {
         return flightsData;
     }
 
+    public static Response getPassengerFlights(String id) {
+        try {
+             //Verify that the id isn't empty
+            if (id.trim().isEmpty()) {
+                return new Response("Id can't be empty", Status.BAD_REQUEST);
+            }
+
+            //Verify that Id is a whole number (long)
+            long longId;
+            try {
+                longId = Long.parseLong(id.trim());
+            } catch (NumberFormatException e) {
+                return new Response("Invalid id.", Status.BAD_REQUEST);
+            }
+            //Verify that tehre is someone whith that id
+            Passenger passenger = StoragePassengers.getInstance().get(id);
+            if(passenger== null){
+                 return new Response("Invalid id.", Status.BAD_REQUEST);
+            }
+            List<Flight>fflight = new ArrayList<>();
+            for(Flight fl : passenger.getFlights()){
+                fflight.add(fl.clone());
+            }
+            return new Response ("Flights for the passenger loaded correctly.", Status.OK, fflight);
+        } catch (Exception e) {
+            return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
