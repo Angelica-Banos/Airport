@@ -11,23 +11,23 @@ import core.views.AirportFrame;
  *
  * @author Angie
  */
-public class UpdateUsers implements Update<Passenger>{
+public class UpdatePassenger implements Update<Passenger>{
 
     private static  AirportFrame view;
-    private static UpdateUsers instance;
+    private static UpdatePassenger instance;
 
-    private UpdateUsers(AirportFrame airportFrame) {
+    private UpdatePassenger(AirportFrame airportFrame) {
         view = airportFrame;
     }
 
-    public static UpdateUsers getUpdateUsers(AirportFrame airportFrame) {
+    public static UpdatePassenger getUpdatePassenger(AirportFrame airportFrame) {
         if (instance == null) {
-            instance = new UpdateUsers(airportFrame);
+            instance = new UpdatePassenger(airportFrame);
         }
         return instance;
     }
 
-    public static UpdateUsers getUpdateUsers() {
+    public static UpdatePassenger getUpdatePassenger() {
         if (instance == null) {
             return null;
         }

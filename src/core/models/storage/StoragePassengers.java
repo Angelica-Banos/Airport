@@ -1,6 +1,6 @@
 package core.models.storage;
 
-import core.controllers.update.UpdateUsers;
+import core.controllers.update.UpdatePassenger;
 import core.models.Passenger;
 import core.models.observers.PassengerObserver;
 import org.json.JSONArray;
@@ -138,7 +138,7 @@ public class StoragePassengers implements Storage<Passenger> {
 
     @Override
     public void notifyObserver(Passenger passenger) {
-        new PassengerObserver(UpdateUsers.getUpdateUsers()).update(passenger);
+        new PassengerObserver(UpdatePassenger.getUpdatePassenger()).update(passenger);
     }
 
     @Override
