@@ -4,7 +4,6 @@
  */
 package core.models;
 
-import core.models.Flight;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author edangulo
  */
-public class Passenger {
+public class Passenger implements Clonable<Passenger> {
 
     private final long id;
     private String firstname;
@@ -23,7 +22,6 @@ public class Passenger {
     private long phone;
     private String country;
     private ArrayList<Flight> flights;
-    private int numFlights;
 
     public Passenger(long id, String firstname, String lastname, LocalDate birthDate, int countryPhoneCode, long phone, String country) {
         this.id = id;
@@ -34,14 +32,8 @@ public class Passenger {
         this.phone = phone;
         this.country = country;
         this.flights = new ArrayList<>();
-        this.numFlights = 0;
     }
 
-    public void incrementNumFlights() {
-        this.numFlights++;
-    }
-
-    
 
     public void addFlight(Flight flight) {
         this.flights.add(flight);
@@ -117,6 +109,20 @@ public class Passenger {
 
     public int getNumFlights() {
         return flights.size();
+    }
+
+    @Override
+    public Passenger clone() {
+        Passenger clonePassenger;
+        long id = this.id;
+        String firstname = this.getFirstname();
+        String lastname = this.getLastname();
+        LocalDate birthDate = this.getBirthDate();
+        int countryPhoneCode = this.getCountryPhoneCode();
+        long phone = this.getPhone();
+        String country = this.getCountry();
+        clonePassenger = new Passenger(id, firstname, lastname, birthDate, countryPhoneCode, phone, country);
+        return clonePassenger;
     }
 
 }

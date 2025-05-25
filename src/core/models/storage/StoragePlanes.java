@@ -130,5 +130,13 @@ public class StoragePlanes implements Storage<Plane> {
     public void notifyObserver(Plane plane) {
         new PlaneObserver().update(plane);
     }
+    @Override
+    public List<Plane> getList() {
+        List<Plane> listPlanes = new ArrayList<>();
+        for (Plane pl : planes.values()) {
+            listPlanes.add(pl.clone());
+        }
+        return listPlanes;
+    }
 
 }

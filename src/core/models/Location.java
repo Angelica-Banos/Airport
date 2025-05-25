@@ -8,8 +8,8 @@ package core.models;
  *
  * @author edangulo
  */
-public class Location {
-    
+public class Location implements Clonable<Location> {
+
     private final String airportId;
     private String airportName;
     private String airportCity;
@@ -49,5 +49,18 @@ public class Location {
     public double getAirportLongitude() {
         return airportLongitude;
     }
-    
+
+    @Override
+    public Location clone() {
+        Location cloneLocation;
+        String airportId = this.getAirportCity();
+        String airportName = this.getAirportName();
+        String airportCity = this.getAirportCity();
+        String airportCountry = this.getAirportCountry();
+        double airportLatitude = this.getAirportLatitude();
+        double airportLongitude = this.getAirportLongitude();
+        cloneLocation = new Location(airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude);
+        return cloneLocation;
+    }
+
 }

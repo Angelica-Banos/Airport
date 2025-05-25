@@ -129,4 +129,13 @@ public class StorageLocations implements Storage<Location> {
         new LocationObserver().update(location);
     }
 
+    @Override
+    public List<Location> getList() {
+                        List<Location> listLocations = new ArrayList<>();
+        for (Location lc : locations.values()) {
+            listLocations.add(lc.clone());
+        }
+        return listLocations;
+    }
+
 }

@@ -6,22 +6,19 @@ package core.controllers.tables;
 
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
-import core.models.Flight;
-import core.models.storage.StorageFlights;
-import java.util.List;
+import core.models.storage.StorageLocations;
 
 /**
  *
  * @author Angie
  */
-public class FlightTable {
+public class LocationTable {
 
-    public static  Response getList() {
+    public static Response getList() {
         try {
-            return new Response("Table refreshed", Status.OK, StorageFlights.getInstance().getList());
+            return new Response("Table refreshed", Status.OK, StorageLocations.getInstance().getList());
         } catch (Exception e) {
             return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
         }
-
     }
 }

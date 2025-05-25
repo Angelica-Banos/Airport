@@ -276,14 +276,6 @@ public class FlightController {
             return new Response("El ID del pasajero no puede estar vacío.", Status.BAD_REQUEST);
         }
         try {
-
-            if (flightId == null || flightId.trim().isEmpty()) {
-                return new Response("El ID del vuelo no puede estar vacío.", Status.BAD_REQUEST);
-            }
-            if (passengerId == null || passengerId.trim().isEmpty()) {
-                return new Response("El ID del pasajero no puede estar vacío.", Status.BAD_REQUEST);
-            }
-
             Flight flight = StorageFlights.getInstance().get(flightId);
             if (flight == null) {
                 return new Response("Vuelo no encontrado con el ID: " + flightId, Status.NOT_FOUND);
@@ -299,17 +291,18 @@ public class FlightController {
             if (passengersInFlight != null && passengersInFlight.contains(passenger)) {
                 return new Response("El pasajero ya está en este vuelo.", Status.BAD_REQUEST);
             }
+            
+            //Revisar la capacidad
+            if(flight.getNumPassengers()>=flight.getPlane().getMaxCapacity()){
+                return new Response("The plane is at max .", Status.BAD_REQUEST);
+            }
 
             // Llamamos al método addPassenger de la instancia de Flight.
             flight.addPassenger(passenger);
 
-            // Como no podemos modificar Flight, lo hacemos aquí.
-            passenger.incrementNumFlights();
             // Guardar el cambio del pasajero en el StoragePassengers
             StoragePassengers.getInstance().update(passenger);
 
-            // Es crucial llamar a update en StorageFlights para persistir el cambio
-            // de la lista de pasajeros dentro del vuelo.
             StorageFlights.getInstance().update(flight);
 
             return new Response("Pasajero " + passenger.getFullname() + " añadido al vuelo " + flight.getId() + " exitosamente.", Status.OK);

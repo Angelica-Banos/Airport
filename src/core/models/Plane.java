@@ -10,15 +10,16 @@ import java.util.ArrayList;
  *
  * @author edangulo
  */
-public class Plane {
+public class Plane implements Clonable<Plane> {
+
     private final String id;
     private String brand;
     private String model;
     private final int maxCapacity;
     private String airline;
     private ArrayList<Flight> flights;
-    
-        public Plane(String id, String brand, String model, int maxCapacity, String airline) {
+
+    public Plane(String id, String brand, String model, int maxCapacity, String airline) {
         this.id = id;
         this.brand = brand;
         this.model = model;
@@ -26,12 +27,11 @@ public class Plane {
         this.airline = airline;
         this.flights = new ArrayList<>();
     }
-        
-        
+
     public void addFlight(Flight flight) {
         this.flights.add(flight);
     }
-    
+
     public String getId() {
         return id;
     }
@@ -55,8 +55,21 @@ public class Plane {
     public ArrayList<Flight> getFlights() {
         return flights;
     }
-    
+
     public int getNumFlights() {
         return flights.size();
+    }
+
+    @Override
+    public Plane clone() {
+        Plane clonePlane;
+        String id = this.getId();
+        String brand = this.getBrand();
+        String model = this.getModel();
+        int maxCapacity = this.getMaxCapacity();
+        String airline = this.getAirline();
+        ArrayList<Flight> flightsClone = this.getFlights();
+        clonePlane = new Plane(id, brand, model, maxCapacity, airline);
+        return clonePlane;
     }
 }

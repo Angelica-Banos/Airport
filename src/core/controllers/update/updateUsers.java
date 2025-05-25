@@ -3,37 +3,40 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package core.controllers.update;
-import core.models.Passenger;
-import core.views.AirportFrame;
 
+import core.models.Passenger;
+import core.models.storage.StoragePassengers;
+import core.views.AirportFrame;
 
 /**
  *
  * @author Angie
  */
 public class UpdateUsers {
-    private final AirportFrame view;
+
+    private static  AirportFrame view;
     private static UpdateUsers instance;
-    
+
     private UpdateUsers(AirportFrame airportFrame) {
-        this.view = airportFrame;
+        view = airportFrame;
     }
-    
-    public static UpdateUsers getUpdateUsers(AirportFrame airportFrame){
+
+    public static UpdateUsers getUpdateUsers(AirportFrame airportFrame) {
         if (instance == null) {
             instance = new UpdateUsers(airportFrame);
-        } 
+        }
         return instance;
     }
-    public static UpdateUsers getUpdateUsers(){
+
+    public static UpdateUsers getUpdateUsers() {
         if (instance == null) {
-           return null;
-        } 
+            return null;
+        }
         return instance;
     }
-    
-    
-    public void newPassengerMade(Passenger passenger){
+
+    public void newPassengerMade(Passenger passenger) {
+        view.updatePassengerTable(passenger.clone());
         view.addCbSelectUser(String.valueOf(passenger.getId()));
     }
 }

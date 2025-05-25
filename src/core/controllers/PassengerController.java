@@ -301,26 +301,26 @@ public class PassengerController {
     public static boolean updatePassenger(Passenger passenger) {
         return StoragePassengers.getInstance().update(passenger);
     }
-
-    public static List<Object[]> getPassengerTableData() {
-        StoragePassengers storage = StoragePassengers.getInstance();
-        List<Object[]> tableData = new ArrayList<>();
-
-        for (Passenger p : storage.getAll()) {
-            Object[] row = {
-                p.getId(),
-                p.getFullname(),
-                p.getBirthDate(),
-                p.calculateAge(),
-                p.generateFullPhone(),
-                p.getCountry(),
-                p.getNumFlights()
-            };
-            tableData.add(row);
-        }
-
-        return tableData;
-    }
+//
+//    public static List<Object[]> getPassengerTableData() {
+//        StoragePassengers storage = StoragePassengers.getInstance();
+//        List<Object[]> tableData = new ArrayList<>();
+//
+//        for (Passenger p : storage.getAll()) {
+//            Object[] row = {
+//                p.getId(),
+//                p.getFullname(),
+//                p.getBirthDate(),
+//                p.calculateAge(),
+//                p.generateFullPhone(),
+//                p.getCountry(),
+//                p.getNumFlights()
+//            };
+//            tableData.add(row);
+//        }
+//
+//        return tableData;
+//    }
     public static List<Object[]> getFlightsForPassenger(String passengerId) {
         List<Object[]> flightsData = new ArrayList<>();
         
@@ -339,7 +339,7 @@ public class PassengerController {
 
        
         StorageFlights storageFlights = StorageFlights.getInstance();
-        List<Flight> allFlights = storageFlights.getAllAsList(); // Asumo que StorageFlights tiene este método
+        List<Flight> allFlights = storageFlights.getAllAsList(); 
 
        
         for (Flight flight : allFlights) {

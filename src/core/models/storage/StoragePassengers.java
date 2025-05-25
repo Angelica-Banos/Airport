@@ -9,8 +9,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StoragePassengers implements Storage<Passenger> {
@@ -124,5 +127,12 @@ public class StoragePassengers implements Storage<Passenger> {
     public void notifyObserver(Passenger passenger) {
         new PassengerObserver().update(passenger);
     }
-
+    @Override
+    public List<Passenger> getList(){
+                List<Passenger> listPassengers = new ArrayList<>();
+        for (Passenger ps : passengers.values()) {
+            listPassengers.add(ps.clone());
+        }
+        return listPassengers;
+    }
 }

@@ -93,6 +93,7 @@ public class StorageFlights implements Storage<Flight> {
             return false;
         }
         flightsMap.put(flight.getId(), flight);
+        System.out.println(flight.getPassengers().getFirst());
         return true;
     }
 
@@ -100,8 +101,8 @@ public class StorageFlights implements Storage<Flight> {
     public void notifyObserver(Flight flight) {
         new FlightObserver().update(flight);
     }
-
-    public List<Flight> getListSorted() {
+    @Override
+    public List<Flight> getList() {
         List<Flight> sortedFlights = new ArrayList<>();
         for (Flight fl : flightsMap.values()) {
             sortedFlights.add(fl.clone());

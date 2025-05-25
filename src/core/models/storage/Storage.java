@@ -4,6 +4,8 @@
  */
 package core.models.storage;
 
+import java.util.List;
+
 /**
  *
  * @author Angie
@@ -15,5 +17,5 @@ public interface Storage<T> {
     boolean update(T obj);
     public boolean loadFromJson(String filepath);
     public void notifyObserver(T obj);
-    
+    public List<T> getList();
 }

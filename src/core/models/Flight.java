@@ -51,7 +51,6 @@ public class Flight implements Clonable<Flight> {
         this.scaleLocation = scaleLocation;
         this.hoursDurationScale = hoursDurationScale;
         this.minutesDurationScale = minutesDurationScale;
-
         this.plane.addFlight(this);
     }
 
