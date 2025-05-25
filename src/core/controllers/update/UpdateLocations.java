@@ -11,7 +11,7 @@ import core.views.AirportFrame;
  *
  * @author Angie
  */
-public class UpdateLocations {
+public class UpdateLocations implements Update<Location> {
         private final AirportFrame view;
     private static UpdateLocations instance;
 
@@ -32,8 +32,8 @@ public class UpdateLocations {
         }
         return instance;
     }
-
-    public void newLocationMade(Location location) {
+@Override
+    public void newObject(Location location) {
         view.addCbDelayLocationId(String.valueOf(location.getAirportId()));
     }
 

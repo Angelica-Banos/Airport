@@ -5,14 +5,13 @@
 package core.controllers.update;
 
 import core.models.Passenger;
-import core.models.storage.StoragePassengers;
 import core.views.AirportFrame;
 
 /**
  *
  * @author Angie
  */
-public class UpdateUsers {
+public class UpdateUsers implements Update<Passenger>{
 
     private static  AirportFrame view;
     private static UpdateUsers instance;
@@ -34,8 +33,8 @@ public class UpdateUsers {
         }
         return instance;
     }
-
-    public void newPassengerMade(Passenger passenger) {
+@Override
+    public void newObject(Passenger passenger) {
         view.updatePassengerTable(passenger.clone());
         view.addCbSelectUser(String.valueOf(passenger.getId()));
     }

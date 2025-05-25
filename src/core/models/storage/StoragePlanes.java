@@ -4,6 +4,7 @@
  */
 package core.models.storage;
 
+import core.controllers.update.UpdatePlanes;
 import core.models.Plane;
 import core.models.observers.PlaneObserver;
 import java.io.IOException;
@@ -128,7 +129,7 @@ public class StoragePlanes implements Storage<Plane> {
 
     @Override
     public void notifyObserver(Plane plane) {
-        new PlaneObserver().update(plane);
+        new PlaneObserver(UpdatePlanes.getUpdatePlanes()).update(plane);
     }
     @Override
     public List<Plane> getList() {

@@ -11,7 +11,7 @@ import core.views.AirportFrame;
  *
  * @author Angie
  */
-public class UpdatePlanes {
+public class UpdatePlanes implements Update<Plane>{
 
     private final AirportFrame view;
     private static UpdatePlanes instance;
@@ -33,8 +33,8 @@ public class UpdatePlanes {
         }
         return instance;
     }
-
-    public void newPlaneMade(Plane plane) {
+@Override
+    public void newObject(Plane plane) {
         view.addCbFlightPlane(String.valueOf(plane.getId()));
     }
 

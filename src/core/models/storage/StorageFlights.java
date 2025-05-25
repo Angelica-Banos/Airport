@@ -1,5 +1,6 @@
 package core.models.storage;
 
+import core.controllers.update.UpdateFlights;
 import core.models.Flight;
 import core.models.Location;
 import core.models.Passenger; // ¡NUEVO! Importar Passenger
@@ -103,7 +104,7 @@ public class StorageFlights implements Storage<Flight> {
 
     @Override
     public void notifyObserver(Flight flight) {
-        new FlightObserver().update(flight);
+        new FlightObserver(UpdateFlights.getUpdateFlights()).update(flight);
     }
 
     @Override
