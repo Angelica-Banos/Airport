@@ -101,7 +101,7 @@ public class StorageFlights implements Storage<Flight> {
         new FlightObserver().update(flight);
     }
 
-    public List<Flight> getFlightsSortedById() {
+    public List<Flight> getListSorted() {
         List<Flight> sortedFlights = new ArrayList<>();
         for (Flight fl : flightsMap.values()) {
             sortedFlights.add(fl.clone());

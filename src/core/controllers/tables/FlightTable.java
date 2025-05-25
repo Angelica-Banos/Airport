@@ -18,7 +18,7 @@ public class FlightTable {
 
     public static  Response getList() {
         try {
-            return new Response("Table refreshed", Status.OK, StorageFlights.getInstance().getFlightsSortedById());
+            return new Response("Table refreshed", Status.OK, StorageFlights.getInstance().getListSorted());
         } catch (Exception e) {
             return new Response("Internal Server Error", Status.INTERNAL_SERVER_ERROR);
         }
