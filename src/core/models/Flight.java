@@ -73,7 +73,12 @@ public class Flight implements Clonable<Flight> {
             int minutesDurationScale = this.getMinutesDurationScale();
             flightClone = new Flight(id, plane, departureLocation, scaleLocation, arrivalLocation, departureDate, hoursDurationArrival, minutesDurationArrival, hoursDurationScale, minutesDurationScale);
         }
+        flightClone.setPassengers(passengers);
         return flightClone;
+    }
+
+    public void setPassengers(ArrayList<Passenger> passengers) {
+        this.passengers = passengers;
     }
 
     public ArrayList<Passenger> getPassengers() {
