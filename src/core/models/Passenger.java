@@ -1,6 +1,3 @@
-
-
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -17,7 +14,7 @@ import java.util.ArrayList;
  * @author edangulo
  */
 public class Passenger {
-    
+
     private final long id;
     private String firstname;
     private String lastname;
@@ -26,6 +23,7 @@ public class Passenger {
     private long phone;
     private String country;
     private ArrayList<Flight> flights;
+    private int numFlights;
 
     public Passenger(long id, String firstname, String lastname, LocalDate birthDate, int countryPhoneCode, long phone, String country) {
         this.id = id;
@@ -36,12 +34,19 @@ public class Passenger {
         this.phone = phone;
         this.country = country;
         this.flights = new ArrayList<>();
+        this.numFlights = 0;
     }
+
+    public void incrementNumFlights() {
+        this.numFlights++;
+    }
+
+    
 
     public void addFlight(Flight flight) {
         this.flights.add(flight);
     }
-    
+
     public long getId() {
         return id;
     }
@@ -97,21 +102,21 @@ public class Passenger {
     public void setCountry(String country) {
         this.country = country;
     }
-    
+
     public String getFullname() {
         return firstname + " " + lastname;
     }
-    
+
     public String generateFullPhone() {
         return "+" + countryPhoneCode + " " + phone;
     }
-    
+
     public int calculateAge() {
         return Period.between(birthDate, LocalDate.now()).getYears();
     }
-    
+
     public int getNumFlights() {
         return flights.size();
     }
-    
+
 }

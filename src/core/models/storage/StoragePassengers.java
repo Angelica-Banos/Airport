@@ -22,6 +22,10 @@ public class StoragePassengers implements Storage<Passenger> {
         passengers = new HashMap<>();
     }
 
+    public boolean exists(String id) {
+        return passengers.containsKey(id);
+    }
+
     public static StoragePassengers getInstance() {
         if (instance == null) {
             instance = new StoragePassengers();
