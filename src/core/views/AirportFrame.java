@@ -1561,7 +1561,7 @@ public class AirportFrame extends javax.swing.JFrame {
             txtPassangerCountryCode.setText("");
             txtPassangerPhoneNumber.setText("");
             txtPassangerCountry.setText("");
-
+            cbSelectUser.addItem(id);
         }
 
 
