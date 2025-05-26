@@ -1721,7 +1721,7 @@ public class AirportFrame extends javax.swing.JFrame {
         // La vista solo se encarga de mostrar el resultado del controlador
         if (response.getStatus() <= 200) {
             JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
-             refreshFlightsForPassengerTable(passengerId);
+            cbAddFlightFlight.setSelectedIndex(0);
         } else {
             JOptionPane.showMessageDialog(this, response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -1762,6 +1762,7 @@ public class AirportFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         String passengerId = cbSelectUser.getItemAt(cbSelectUser.getSelectedIndex());
         DefaultTableModel model = (DefaultTableModel) tableShowsMyFlights.getModel();
+        model.setRowCount(0);
         Response response = PassengerController.getPassengerFlights(passengerId);
 
         if (response.getStatus() >= 500) {
@@ -1909,7 +1910,8 @@ public class AirportFrame extends javax.swing.JFrame {
         this.cbFlightArrivalLocation.addItem(id);
     }
     private void cbSelectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSelectUserActionPerformed
-
+        DefaultTableModel model = (DefaultTableModel) tableShowsMyFlights.getModel();
+        model.setRowCount(0);
         String id = cbSelectUser.getSelectedItem().toString();
         if (!id.equals(cbSelectUser.getItemAt(0))) {
             txtUpdInfoId.setText(id);

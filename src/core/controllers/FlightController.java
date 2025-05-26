@@ -299,6 +299,7 @@ public class FlightController {
 
             // Llamamos al método addPassenger de la instancia de Flight.
             flight.addPassenger(passenger);
+            passenger.addFlight(flight);
 
             // Guardar el cambio del pasajero en el StoragePassengers
             StoragePassengers.getInstance().update(passenger);
