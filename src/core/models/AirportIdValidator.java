@@ -9,7 +9,7 @@ package core.models;
  * @author isabc
  */
 public class AirportIdValidator implements Validator<String> {
-
+//Valida los id 
     @Override
     public boolean isValid(String id) {
         return id != null && id.length() == 3
