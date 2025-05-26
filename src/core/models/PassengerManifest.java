@@ -11,7 +11,7 @@ package core.models;
 import core.models.Flight;
 import core.models.Passenger;
 import java.util.ArrayList;
-
+//Clase paramanejar los pasajeros de fligths
 public class PassengerManifest {
 
     private final Flight flight;
